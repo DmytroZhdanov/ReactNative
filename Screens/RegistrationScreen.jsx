@@ -13,8 +13,9 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import AddIcon from "../assets/images/add.svg";
-import RemoveIcon from "../assets/images/remove.svg";
+import { AntDesign } from "@expo/vector-icons";
+// import AddIcon from "../assets/images/add.svg";
+// import RemoveIcon from "../assets/images/remove.svg";
 
 const initialState = {
   login: "",
@@ -85,10 +86,23 @@ export default function RegistrationScreen() {
                       <View style={styles.photoWrapper}>
                         <Image source={userImage} />
                       </View>
-                      <RemoveIcon style={styles.photoIcon} />
+                      <View style={styles.iconWrapper}>
+                        <AntDesign
+                          style={styles.photoIcon}
+                          name="closecircleo"
+                          size={25}
+                          color="#E8E8E8"
+                        />
+                      </View>
                     </>
                   ) : (
-                    <AddIcon style={styles.photoIcon} />
+                    <View style={styles.iconWrapper}>
+                      <AntDesign
+                        name="pluscircleo"
+                        size={25}
+                        color="#FF6C00"
+                      />
+                    </View>
                   )}
                 </TouchableOpacity>
 
@@ -201,10 +215,15 @@ const styles = StyleSheet.create({
     overflow: "visible",
   },
   photoWrapper: { borderRadius: 16, overflow: "hidden" },
-  photoIcon: {
+  iconWrapper: {
+    borderRadius: 12.5,
+    overflow: "hidden",
     position: "absolute",
-    bottom: 8,
-    right: -18.5,
+    bottom: 16,
+    right: -12.5,
+  },
+  photoIcon: {
+    backgroundColor: "#FFFFFF",
   },
   title: {
     textAlign: "center",
