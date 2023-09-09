@@ -14,8 +14,6 @@ import {
   Image,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-// import AddIcon from "../assets/images/add.svg";
-// import RemoveIcon from "../assets/images/remove.svg";
 
 const initialState = {
   login: "",
@@ -97,11 +95,7 @@ export default function RegistrationScreen() {
                     </>
                   ) : (
                     <View style={styles.iconWrapper}>
-                      <AntDesign
-                        name="pluscircleo"
-                        size={25}
-                        color="#FF6C00"
-                      />
+                      <AntDesign name="pluscircleo" size={25} color="#FF6C00" />
                     </View>
                   )}
                 </TouchableOpacity>
@@ -118,6 +112,7 @@ export default function RegistrationScreen() {
                   autoComplete={"name"}
                   value={user.login}
                   returnKeyType={"next"}
+                  placeholderTextColor={"#BDBDBD"}
                 />
 
                 <TextInput
@@ -132,6 +127,7 @@ export default function RegistrationScreen() {
                   returnKeyType={"next"}
                   inputMode={"email"}
                   ref={emailInput}
+                  placeholderTextColor={"#BDBDBD"}
                 />
 
                 <View>
@@ -150,6 +146,7 @@ export default function RegistrationScreen() {
                     secureTextEntry={isPasswordShown ? false : true}
                     value={user.password}
                     ref={passwordInput}
+                    placeholderTextColor={"#BDBDBD"}
                   />
 
                   <TouchableOpacity
@@ -233,6 +230,7 @@ const styles = StyleSheet.create({
     color: "#212121",
   },
   input: {
+    height: 50,
     backgroundColor: "#e8e8e8",
     borderWidth: 1,
     borderColor: "#f6f6f6",

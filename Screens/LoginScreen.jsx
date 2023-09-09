@@ -29,16 +29,16 @@ export default function RegistrationScreen() {
 
   const passwordInput = useRef(null);
 
-  // useEffect(() => {
-  //   const onChange = () => {
-  //     const width = Dimensions.get("window").width;
-  //     setWindowWidth(width);
-  //   };
-  //   Dimensions.addEventListener("change", onChange);
-  //   return () => {
-  //     Dimensions.removeEventListener("change", onChange);
-  //   };
-  // }, []);
+  useEffect(() => {
+    const onChange = () => {
+      const width = Dimensions.get("window").width;
+      setWindowWidth(width);
+    };
+    Dimensions.addEventListener("change", onChange);
+    return () => {
+      Dimensions.removeEventListener("change", onChange);
+    };
+  }, []);
 
   const handleInputFocus = input => {
     setIsKeyboardShown(true);
@@ -83,6 +83,7 @@ export default function RegistrationScreen() {
                   value={user.email}
                   returnKeyType={"next"}
                   inputMode={"email"}
+                  placeholderTextColor={"#BDBDBD"}
                 />
 
                 <View>
@@ -101,6 +102,7 @@ export default function RegistrationScreen() {
                     secureTextEntry={isPasswordShown ? false : true}
                     value={user.password}
                     ref={passwordInput}
+                    placeholderTextColor={"#BDBDBD"}
                   />
 
                   <TouchableOpacity
@@ -146,7 +148,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     justifyContent: "flex-end",
   },
-  formWrapper: {},
+  formWrapper: {paddingTop: 81},
   form: {
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
@@ -162,6 +164,7 @@ const styles = StyleSheet.create({
     color: "#212121",
   },
   input: {
+    height: 50,
     backgroundColor: "#e8e8e8",
     borderWidth: 1,
     borderColor: "#f6f6f6",
