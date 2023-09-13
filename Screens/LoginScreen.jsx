@@ -80,6 +80,7 @@ export default function RegistrationScreen() {
                   onSubmitEditing={() => passwordInput.current.focus()}
                   placeholder="Email address"
                   autoComplete={"email"}
+                  keyboardType={"email-address"}
                   value={user.email}
                   returnKeyType={"next"}
                   inputMode={"email"}
@@ -124,13 +125,9 @@ export default function RegistrationScreen() {
                       <Text style={styles.buttonText}>Log In</Text>
                     </TouchableOpacity>
 
-                    <View style={styles.bottomTextBox}>
-                      <Text style={styles.bottomText}>Don't have an account yet? </Text>
-
-                      <TouchableOpacity>
-                        <Text style={styles.bottomText}>Register</Text>
-                      </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity>
+                      <Text style={styles.bottomText}>Don't have an account yet? Register</Text>
+                    </TouchableOpacity>
                   </View>
                 )}
               </View>
@@ -148,7 +145,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     justifyContent: "flex-end",
   },
-  formWrapper: {paddingTop: 81},
+  formWrapper: { paddingTop: 81 },
   form: {
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
@@ -205,13 +202,10 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
     fontSize: 16,
   },
-  bottomTextBox: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
   bottomText: {
     fontFamily: "Roboto-Regular",
     fontSize: 16,
     color: "#1B4371",
+    textAlign: "center",
   },
 });
