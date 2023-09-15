@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
 import {
   View,
@@ -29,6 +30,8 @@ export default function RegistrationScreen() {
 
   const passwordInput = useRef(null);
 
+  const navigation = useNavigation();
+
   useEffect(() => {
     const onChange = () => {
       const width = Dimensions.get("window").width;
@@ -53,93 +56,105 @@ export default function RegistrationScreen() {
   const handleSubmit = () => {
     console.log(user);
     setUser(initialState);
+
+    // Temporary solution to handle login and logout. Will be deleted after authorization implementation
+    navigation.navigate("Home");
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <ImageBackground
-        source={require("../assets/images/background.jpg")}
-        style={styles.background}
-      >
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
-          <ScrollView>
-            <View style={styles.formWrapper}>
-              <View
-                style={{
-                  ...styles.form,
-                  paddingBottom: isKeyboardShown ? 32 : 144,
-                }}
-              >
-                <Text style={styles.title}>Login</Text>
+    <View style={styles.container}>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <ImageBackground
+          source={require("../assets/images/background.jpg")}
+          style={styles.background}
+        >
+          <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
+            <ScrollView>
+              <View style={styles.formWrapper}>
+                <View
+                  style={{
+                    ...styles.form,
+                    paddingBottom: isKeyboardShown ? 32 : 144,
+                  }}
+                >
+                  <Text style={styles.title}>Login</Text>
 
-                <TextInput
-                  style={[styles.input, focusedInput === "email" && styles.inputFocused]}
-                  onFocus={() => handleInputFocus("email")}
-                  onBlur={() => handleInputBlur("email")}
-                  onChangeText={value => setUser(prevState => ({ ...prevState, email: value }))}
-                  onSubmitEditing={() => passwordInput.current.focus()}
-                  placeholder="Email address"
-                  autoComplete={"email"}
-                  keyboardType={"email-address"}
-                  value={user.email}
-                  returnKeyType={"next"}
-                  inputMode={"email"}
-                  placeholderTextColor={"#BDBDBD"}
-                />
-
-                <View>
                   <TextInput
-                    style={[
-                      { ...styles.input, paddingRight: 64 },
-                      focusedInput === "password" && styles.inputFocused,
-                    ]}
-                    onFocus={() => handleInputFocus("password")}
-                    onBlur={() => handleInputBlur("password")}
-                    onChangeText={value =>
-                      setUser(prevState => ({ ...prevState, password: value }))
-                    }
-                    placeholder="Password"
-                    autoComplete={"new-password"}
-                    secureTextEntry={isPasswordShown ? false : true}
-                    value={user.password}
-                    ref={passwordInput}
+                    style={[styles.input, focusedInput === "email" && styles.inputFocused]}
+                    onFocus={() => handleInputFocus("email")}
+                    onBlur={() => handleInputBlur("email")}
+                    onChangeText={value => setUser(prevState => ({ ...prevState, email: value }))}
+                    onSubmitEditing={() => passwordInput.current.focus()}
+                    placeholder="Email address"
+                    autoComplete={"email"}
+                    keyboardType={"email-address"}
+                    value={user.email}
+                    returnKeyType={"next"}
+                    inputMode={"email"}
                     placeholderTextColor={"#BDBDBD"}
                   />
 
-                  <TouchableOpacity
-                    style={styles.passwordShowWrapper}
-                    activeOpacity={0.5}
-                    onPress={() => setIsPasswordShown(!isPasswordShown)}
-                  >
-                    <Text style={styles.passwordShowText}>{isPasswordShown ? "Hide" : "Show"}</Text>
-                  </TouchableOpacity>
-                </View>
-
-                {!isKeyboardShown && (
                   <View>
-                    <TouchableOpacity
-                      style={styles.button}
-                      onPress={handleSubmit}
-                      activeOpacity={0.5}
-                    >
-                      <Text style={styles.buttonText}>Log In</Text>
-                    </TouchableOpacity>
+                    <TextInput
+                      style={[
+                        { ...styles.input, paddingRight: 64 },
+                        focusedInput === "password" && styles.inputFocused,
+                      ]}
+                      onFocus={() => handleInputFocus("password")}
+                      onBlur={() => handleInputBlur("password")}
+                      onChangeText={value =>
+                        setUser(prevState => ({ ...prevState, password: value }))
+                      }
+                      placeholder="Password"
+                      autoComplete={"new-password"}
+                      secureTextEntry={isPasswordShown ? false : true}
+                      value={user.password}
+                      ref={passwordInput}
+                      placeholderTextColor={"#BDBDBD"}
+                    />
 
-                    <TouchableOpacity>
-                      <Text style={styles.bottomText}>Don't have an account yet? Register</Text>
+                    <TouchableOpacity
+                      style={styles.passwordShowWrapper}
+                      activeOpacity={0.5}
+                      onPress={() => setIsPasswordShown(!isPasswordShown)}
+                    >
+                      <Text style={styles.passwordShowText}>
+                        {isPasswordShown ? "Hide" : "Show"}
+                      </Text>
                     </TouchableOpacity>
                   </View>
-                )}
+
+                  {!isKeyboardShown && (
+                    <View>
+                      <TouchableOpacity
+                        style={styles.button}
+                        onPress={handleSubmit}
+                        activeOpacity={0.5}
+                      >
+                        <Text style={styles.buttonText}>Log In</Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate("Register");
+                        }}
+                      >
+                        <Text style={styles.bottomText}>Don't have an account yet? Register</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </View>
               </View>
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </ImageBackground>
-    </TouchableWithoutFeedback>
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </ImageBackground>
+      </TouchableWithoutFeedback>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: "#fff" },
   background: {
     flex: 1,
     resizeMode: "cover",
