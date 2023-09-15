@@ -1,16 +1,41 @@
-import { Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 // icons import
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
 export default function CreatePostsScreen() {
-  const width = Dimensions.get("window").width;
+  const [windowWidth, setWindowWidth] = useState(Dimensions.get("window").width);
+
+  useEffect(() => {
+    const onChange = () => {
+      const width = Dimensions.get("window").width;
+      setWindowWidth(width);
+    };
+    Dimensions.addEventListener("change", onChange);
+    return () => {
+      Dimensions.removeEventListener("change", onChange);
+    };
+  }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} >
       <TouchableOpacity activeOpacity={0.7}>
-        <View style={{ ...styles.imageWrapper, width: width - 32, aspectRatio: 1.43 }}>
+        <View
+          style={{
+            ...styles.imageWrapper,
+            width: windowWidth - 32,
+            height: (windowWidth - 32) / 1.43,
+          }}
+        >
           <View style={styles.addImageBtn}>
             <FontAwesome name="camera" size={24} color="#BDBDBD" />
           </View>

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 // icon import
@@ -5,10 +6,21 @@ import { Feather } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
 export default function ProfilePost({ item, navigation }) {
-  const width = Dimensions.get("window").width;
+  const [windowWidth, setWindowWidth] = useState(Dimensions.get("window").width);
+
+  useEffect(() => {
+    const onChange = () => {
+      const width = Dimensions.get("window").width;
+      setWindowWidth(width);
+    };
+    Dimensions.addEventListener("change", onChange);
+    return () => {
+      Dimensions.removeEventListener("change", onChange);
+    };
+  }, []);
 
   const handleCommentsPress = () => {
-    navigation.navigate("Comments", {postId: item.id})
+    navigation.navigate("Comments", { postId: item.id });
   };
 
   return (
@@ -16,7 +28,7 @@ export default function ProfilePost({ item, navigation }) {
       <Image
         source={item.image}
         alt={item.name}
-        style={{ width: width - 32, borderRadius: 8 }}
+        style={{ ...styles.image, width: windowWidth - 32, height: (windowWidth - 32) / 1.43 }}
         resizeMode={"cover"}
       />
       <Text style={styles.name}>{item.name}</Text>
@@ -51,6 +63,9 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
     paddingHorizontal: 16,
     backgroundColor: "#fff",
+  },
+  image: {
+    borderRadius: 8,
   },
   name: {
     marginVertical: 8,

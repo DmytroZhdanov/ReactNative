@@ -1,4 +1,5 @@
 import { useRoute } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -11,7 +12,6 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useState } from "react";
 
 import Comment from "../Comment/Comment";
 import CommentsListEmpty from "../CommentsListEmpty/CommentsListEmpty";
@@ -29,8 +29,21 @@ export default function CommentsScreen() {
   const { postId } = useRoute().params;
   const post = posts.find(post => post.id === postId);
 
-  const width = Dimensions.get("window").width;
-  const height = Dimensions.get("window").height;
+  const [windowWidth, setWindowWidth] = useState(Dimensions.get("window").width);
+  const [windowHeight, setWindowHeight] = useState(Dimensions.get("window").height);
+
+  useEffect(() => {
+    const onChange = () => {
+      const width = Dimensions.get("window").width;
+      const height = Dimensions.get("window").height;
+      setWindowWidth(width);
+      setWindowHeight(height);
+    };
+    Dimensions.addEventListener("change", onChange);
+    return () => {
+      Dimensions.removeEventListener("change", onChange);
+    };
+  }, []);
 
   const handleCommentSend = () => {
     Keyboard.dismiss();
@@ -41,7 +54,7 @@ export default function CommentsScreen() {
   return (
     <View
       style={[
-        { ...styles.container, height: height - 103 },
+        { ...styles.container, height: windowHeight - 103 },
         isInputFocused && { paddingBottom: 340 },
       ]}
     >
@@ -49,12 +62,12 @@ export default function CommentsScreen() {
         <>
           <FlatList
             data={post.comments}
-            renderItem={Comment}
+            renderItem={({ item }) => <Comment item={item} windowWidth={windowWidth} />}
             ListHeaderComponent={
               <Image
                 source={post.image}
                 alt={post.name}
-                style={{ width: width - 32, borderRadius: 8 }}
+                style={{ width: windowWidth - 32, borderRadius: 8 }}
                 resizeMode={"cover"}
               />
             }
@@ -67,7 +80,7 @@ export default function CommentsScreen() {
               <TextInput
                 placeholder="Comment..."
                 placeholderTextColor="#BDBDBD"
-                style={{ ...styles.input, width: width - 32 }}
+                style={{ ...styles.input, width: windowWidth - 32 }}
                 multiline={true}
                 onChangeText={value => setComment(value)}
                 value={comment}

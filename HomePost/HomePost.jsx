@@ -1,10 +1,22 @@
+import { useEffect, useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 // icon import
 import { Feather } from "@expo/vector-icons";
 
 export default function HomePost({ item, navigation }) {
-  const width = Dimensions.get("window").width;
+  const [windowWidth, setWindowWidth] = useState(Dimensions.get("window").width);
+
+  useEffect(() => {
+    const onChange = () => {
+      const width = Dimensions.get("window").width;
+      setWindowWidth(width);
+    };
+    Dimensions.addEventListener("change", onChange);
+    return () => {
+      Dimensions.removeEventListener("change", onChange);
+    };
+  }, []);
 
   const handleCommentsPress = () => {
     navigation.navigate("Comments", { postId: item.id });
@@ -15,7 +27,7 @@ export default function HomePost({ item, navigation }) {
       <Image
         source={item.image}
         alt={item.name}
-        style={{ width: width - 32, borderRadius: 8 }}
+        style={{ width: windowWidth - 32, height: (windowWidth - 32) / 1.43, borderRadius: 8 }}
         resizeMode={"cover"}
       />
       <Text style={styles.name}>{item.name}</Text>

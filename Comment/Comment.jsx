@@ -1,7 +1,7 @@
+import { useEffect, useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 
-export default function Comment({ item }) {
-  const width = Dimensions.get("window").width;
+export default function Comment({ item, windowWidth }) {
 
   // Temporary solution for styling comment item
   const isAuthorizedUser = false;
@@ -12,7 +12,7 @@ export default function Comment({ item }) {
       <View
         style={[
           styles.commentContainer,
-          { width: width - 76 },
+          { width: windowWidth - 76 },
           isAuthorizedUser ? { borderTopLeftRadius: 6 } : { borderTopRightRadius: 6 },
         ]}
       >

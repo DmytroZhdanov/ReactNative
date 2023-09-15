@@ -4,8 +4,19 @@ import { Dimensions, StyleSheet, Text, View } from "react-native";
 export default function ProfileListEmpty() {
   const [windowHeight, setWindowHeight] = useState(Dimensions.get("window").height);
 
+  useEffect(() => {
+    const onChange = () => {
+      const height = Dimensions.get("window").height;
+      setWindowHeight(height);
+    };
+    Dimensions.addEventListener("change", onChange);
+    return () => {
+      Dimensions.removeEventListener("change", onChange);
+    };
+  }, []);
+
   return (
-    <View style={{ ...styles.noPostTextWrapper, height: windowHeight - 390}}>
+    <View style={{ ...styles.noPostTextWrapper, height: windowHeight - 390 }}>
       <Text style={styles.noPostText}>No posts yet...</Text>
       <Text style={styles.noPostText}>Create your first post now!</Text>
     </View>
