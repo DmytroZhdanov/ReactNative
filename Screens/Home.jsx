@@ -17,8 +17,7 @@ export default function Home() {
 
   const tabBarOptions = {
     common: {
-      tabBarShowLabel: false,
-      tabBarIconStyle: { height: 83 },
+      headerTitleAlign: "center",
       headerTitleStyle: {
         fontSize: 17,
         fontFamily: "Roboto-Medium",
@@ -26,6 +25,8 @@ export default function Home() {
         paddingVertical: 11,
         paddingHorizontal: 48,
       },
+      tabBarShowLabel: false,
+      tabBarIconStyle: { height: 83 },
     },
     postsScreen: {
       headerRight: () => (

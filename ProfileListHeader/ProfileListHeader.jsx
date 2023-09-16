@@ -25,40 +25,46 @@ export default function ProfileListHeader() {
   };
 
   return (
-    <View style={styles.content}>
-      <TouchableOpacity
-        style={{ ...styles.photoContainer, left: windowWidth / 2 - 60 }}
-        activeOpacity={0.8}
-        onPress={handleUserImagePress}
-      >
-        {userImage ? (
-          <>
-            <View style={styles.photoWrapper}>
-              <Image source={userImage} alt={"User Image"} />
-            </View>
+    <View style={styles.contentWrapper}>
+      <View style={styles.content}>
+        <TouchableOpacity
+          style={{ ...styles.photoContainer, left: windowWidth / 2 - 60 }}
+          activeOpacity={0.8}
+          onPress={handleUserImagePress}
+        >
+          {userImage ? (
+            <>
+              <View style={styles.photoWrapper}>
+                <Image source={userImage} alt={"User Image"} />
+              </View>
+              <View style={styles.iconWrapper}>
+                <AntDesign style={styles.photoIcon} name="closecircleo" size={25} color="#E8E8E8" />
+              </View>
+            </>
+          ) : (
             <View style={styles.iconWrapper}>
-              <AntDesign style={styles.photoIcon} name="closecircleo" size={25} color="#E8E8E8" />
+              <AntDesign name="pluscircleo" size={25} color="#FF6C00" />
             </View>
-          </>
-        ) : (
-          <View style={styles.iconWrapper}>
-            <AntDesign name="pluscircleo" size={25} color="#FF6C00" />
-          </View>
-        )}
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.logoutBtn}>
-        <Feather name="log-out" size={24} color="#BDBDBD" />
-      </TouchableOpacity>
-      <Text style={styles.userName}>Natali Romanova</Text>
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.logoutBtn}>
+          <Feather name="log-out" size={24} color="#BDBDBD" />
+        </TouchableOpacity>
+        <Text style={styles.userName}>Natali Romanova</Text>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  contentWrapper: {
+    paddingTop: 60,
+    marginBottom: -1,
+  },
   content: {
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
     paddingTop: 92,
     paddingBottom: 33,
   },

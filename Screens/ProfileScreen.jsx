@@ -42,10 +42,10 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   contentWrapper: {
-    paddingTop: 147,
+    paddingTop: 87,
   },
   contentFooter: {
-    height: 158,
+    height: 98,
     backgroundColor: "#ffffff",
   },
 });
