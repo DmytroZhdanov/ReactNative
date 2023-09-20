@@ -84,11 +84,12 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   tabBtnLeft: {
+    width: 36,
     marginTop: 17,
     marginLeft: "auto",
-    marginRight: 12,
   },
   tabBtnRight: {
+    width: 36,
     marginTop: 17,
     marginRight: "auto",
     marginLeft: 12,
