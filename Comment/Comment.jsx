@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 
 export default function Comment({ item, windowWidth }) {
-
   // Temporary solution for styling comment item
   const isAuthorizedUser = false;
 

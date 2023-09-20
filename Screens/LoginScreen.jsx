@@ -7,7 +7,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Image,
   Dimensions,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,

@@ -32,18 +32,18 @@ export default function CommentsScreen() {
   const [windowWidth, setWindowWidth] = useState(Dimensions.get("window").width);
   const [windowHeight, setWindowHeight] = useState(Dimensions.get("window").height);
 
-  // useEffect(() => {
-  //   const onChange = () => {
-  //     const width = Dimensions.get("window").width;
-  //     const height = Dimensions.get("window").height;
-  //     setWindowWidth(width);
-  //     setWindowHeight(height);
-  //   };
-  //   Dimensions.addEventListener("change", onChange);
-  //   return () => {
-  //     Dimensions.removeEventListener("change", onChange);
-  //   };
-  // }, []);
+  useEffect(() => {
+    const onChange = () => {
+      const width = Dimensions.get("window").width;
+      const height = Dimensions.get("window").height;
+      setWindowWidth(width);
+      setWindowHeight(height);
+    };
+    Dimensions.addEventListener("change", onChange);
+    return () => {
+      Dimensions.removeEventListener("change", onChange);
+    };
+  }, []);
 
   const handleCommentSend = () => {
     Keyboard.dismiss();
