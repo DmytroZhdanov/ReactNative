@@ -16,7 +16,7 @@ export default function CommentsListEmpty() {
   }, []);
 
   return (
-    <View style={{ ...styles.noPostTextWrapper, height: windowHeight - 390 }}>
+    <View style={{ ...styles.noPostTextWrapper, height: windowHeight - 472 }}>
       <Text style={styles.noPostText}>No any comments yet...</Text>
       <Text style={styles.noPostText}>Write the first one!</Text>
     </View>

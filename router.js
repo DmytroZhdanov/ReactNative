@@ -21,6 +21,7 @@ const commentsScreenOptions = {
   headerBackTitleVisible: false,
   headerBackImage: () => <Feather name="arrow-left" size={24} color="#212121" />,
   headerLeftContainerStyle: { paddingHorizontal: 16, paddingVertical: 10 },
+  headerTitleAlign: "center",
   headerTitleStyle: { marginRight: 32 },
 };
 

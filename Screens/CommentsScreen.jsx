@@ -32,18 +32,18 @@ export default function CommentsScreen() {
   const [windowWidth, setWindowWidth] = useState(Dimensions.get("window").width);
   const [windowHeight, setWindowHeight] = useState(Dimensions.get("window").height);
 
-  useEffect(() => {
-    const onChange = () => {
-      const width = Dimensions.get("window").width;
-      const height = Dimensions.get("window").height;
-      setWindowWidth(width);
-      setWindowHeight(height);
-    };
-    Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const onChange = () => {
+  //     const width = Dimensions.get("window").width;
+  //     const height = Dimensions.get("window").height;
+  //     setWindowWidth(width);
+  //     setWindowHeight(height);
+  //   };
+  //   Dimensions.addEventListener("change", onChange);
+  //   return () => {
+  //     Dimensions.removeEventListener("change", onChange);
+  //   };
+  // }, []);
 
   const handleCommentSend = () => {
     Keyboard.dismiss();
@@ -54,7 +54,8 @@ export default function CommentsScreen() {
   return (
     <View
       style={[
-        { ...styles.container, height: windowHeight - 103 },
+        styles.container,
+        { height: windowHeight - (Platform.OS === "ios" ? 103 : 80) },
         isInputFocused && { paddingBottom: 340 },
       ]}
     >
@@ -73,13 +74,23 @@ export default function CommentsScreen() {
             }
             ListHeaderComponentStyle={{ marginBottom: 32 }}
             ListEmptyComponent={CommentsListEmpty}
-            style={{ marginBottom: 43 }}
+            style={[
+              { marginBottom: Platform.OS === "ios" ? 8 : -16 },
+              isInputFocused && { marginBottom: Platform.OS === "ios" ? 40 : 8 },
+            ]}
           />
           <KeyboardAvoidingView behavior="position">
-            <View style={[styles.commentInputWrapper, isInputFocused && { bottom: 16 }]}>
+            <View
+              style={[
+                styles.commentInputWrapper,
+                { bottom: Platform.OS === "ios" ? -16 : -48 },
+                isInputFocused && { bottom: Platform.OS === "ios" ? 16 : -16 },
+              ]}
+            >
               <TextInput
                 placeholder="Comment..."
                 placeholderTextColor="#BDBDBD"
+                inputMode="text"
                 style={{ ...styles.input, width: windowWidth - 32 }}
                 multiline={true}
                 onChangeText={value => setComment(value)}
@@ -112,11 +123,11 @@ const styles = StyleSheet.create({
   },
   commentInputWrapper: {
     position: "absolute",
-    bottom: -16,
     left: 0,
   },
   input: {
-    maxHeight: 100,
+    height: 50,
+    // maxHeight: 100,
     backgroundColor: "#F6F6F6",
     borderWidth: 1,
     borderColor: "#E8E8E8",
