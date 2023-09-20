@@ -63,6 +63,8 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
     paddingHorizontal: 16,
     backgroundColor: "#ffffff",
+    borderWidth: 1,
+    borderColor: "#ffffff",
   },
   image: {
     borderRadius: 8,
