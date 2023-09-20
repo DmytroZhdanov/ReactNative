@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 
 import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
@@ -26,7 +26,7 @@ export default function Home() {
         paddingHorizontal: 48,
       },
       tabBarShowLabel: false,
-      tabBarIconStyle: { height: 83 },
+      tabBarStyle: { height: Platform.OS === "ios" ? 83 : 63 },
     },
     postsScreen: {
       headerRight: () => (
