@@ -83,7 +83,12 @@ export default function CreatePostsScreen() {
     const result = await ImagePicker.launchImageLibraryAsync();
     if (result.canceled) return;
 
-    navigation.navigate("SnapPreview", { uri: result.assets[0].uri });
+    const info = await MediaLibrary.getAssetInfoAsync(result.assets[0].assetId);
+
+    navigation.navigate("SnapPreview", {
+      uri: result.assets[0].uri,
+      coords: info?.location || null,
+    });
   };
 
   const handleInputFocus = () => {
@@ -163,7 +168,10 @@ export default function CreatePostsScreen() {
               onFocus={handleInputFocus}
               onBlur={handleInputBlur}
               onChangeText={value => {
-                setPost(prevState => ({ ...prevState, location: { ...prevState.location, title: value } }));
+                setPost(prevState => ({
+                  ...prevState,
+                  location: { ...prevState.location, title: value },
+                }));
               }}
               value={post.location.title}
               ref={locationInput}

@@ -70,7 +70,7 @@ export const posts = [
       },
     ],
     likes: 200,
-    location: { title: "Ukraine", coords: { latitude: 48.3794, longitude: 31.1656 } },
+    location: { title: "Ukraine", coords: null },
   },
   {
     id: 3,

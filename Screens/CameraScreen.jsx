@@ -36,8 +36,13 @@ export default function CameraScreen() {
 
     const result = await ImagePicker.launchImageLibraryAsync();
     if (result.canceled) return;
+    
+    const info = await MediaLibrary.getAssetInfoAsync(result.assets[0].assetId);
 
-    navigation.navigate("SnapPreview", { uri: result.assets[0].uri });
+    navigation.navigate("SnapPreview", {
+      uri: result.assets[0].uri,
+      coords: info?.location || null,
+    });
   };
 
   const handleSnap = async () => {
