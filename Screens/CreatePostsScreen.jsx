@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
@@ -9,36 +9,76 @@ import {
   TouchableWithoutFeedback,
   View,
   Keyboard,
+  Image,
 } from "react-native";
+import { Camera } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
+import * as ImagePicker from "expo-image-picker";
 
 // icons import
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
 const initialState = {
+  imageUri: "",
   name: "",
   location: "",
 };
 
 export default function CreatePostsScreen() {
   const [windowWidth, setWindowWidth] = useState(Dimensions.get("window").width);
-  const [imageInfo, setImageInfo] = useState(initialState);
+  const [post, setPost] = useState(initialState);
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
+  const [isPublishDisabled, setIsPublishDisabled] = useState(true);
 
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+  const params = useRoute().params;
 
   const locationInput = useRef(null);
 
+  const [cameraPermission, requestCameraPermission] = Camera.useCameraPermissions();
+  const [mediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
+
+  if (!cameraPermission) {
+    (async () => {
+      await Camera.requestCameraPermissionsAsync();
+    })();
+  }
+
+  if (!mediaLibraryPermission) {
+    (async () => {
+      await MediaLibrary.requestPermissionsAsync();
+    })();
+  }
+
   useEffect(() => {
+    params && params.uri && setPost(prevState => ({ ...prevState, imageUri: params.uri }));
+
     const onChange = () => {
       const width = Dimensions.get("window").width;
       setWindowWidth(width);
     };
-    Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
+    // Dimensions.addEventListener("change", onChange);
+    // return () => {
+    //   Dimensions.removeEventListener("change", onChange);
+    // };
   }, []);
+
+  useEffect(() => {
+    setIsPublishDisabled(post.imageUri === "" || post.name === "" || post.location === "");
+  }, [post]);
+
+  const uploadImage = async () => {
+    if (!mediaLibraryPermission.granted) {
+      await MediaLibrary.requestPermissionsAsync();
+      if (!mediaLibraryPermission.granted) return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync();
+    if (result.canceled) return;
+
+    navigation.navigate("SnapPreview", { uri: result.assets[0].uri });
+  };
 
   const handleInputFocus = () => {
     setIsKeyboardShown(true);
@@ -49,28 +89,48 @@ export default function CreatePostsScreen() {
   };
 
   const handlePublish = () => {
-    console.log(imageInfo);
-    setImageInfo(initialState);
+    console.log(post);
+    setPost(initialState);
 
-    navigation.navigate("Home")
+    navigation.replace("Home");
   };
+
+  const handleErase = () => {
+    setPost(initialState);
+    navigation.replace("Home");
+  }
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-        <TouchableOpacity activeOpacity={0.7}>
-          <View
+        {post.imageUri !== "" ? (
+          <Image
+            src={post.imageUri}
             style={{
-              ...styles.imageWrapper,
+              ...styles.camera,
+              width: windowWidth - 32,
+              height: (windowWidth - 32) / 1.43,
+            }}
+          />
+        ) : (
+          <Camera
+            style={{
+              ...styles.camera,
               width: windowWidth - 32,
               height: (windowWidth - 32) / 1.43,
             }}
           >
-            <View style={styles.addImageBtn}>
+            <TouchableOpacity
+              style={styles.addImageBtn}
+              onPress={() => {
+                navigation.navigate("Camera");
+              }}
+            >
               <FontAwesome name="camera" size={24} color="#BDBDBD" />
-            </View>
-          </View>
-
+            </TouchableOpacity>
+          </Camera>
+        )}
+        <TouchableOpacity activeOpacity={0.7} onPress={uploadImage}>
           <Text style={styles.text}>Upload image</Text>
         </TouchableOpacity>
 
@@ -82,10 +142,10 @@ export default function CreatePostsScreen() {
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
             onChangeText={value => {
-              setImageInfo(prevState => ({ ...prevState, name: value }));
+              setPost(prevState => ({ ...prevState, name: value }));
             }}
             onSubmitEditing={() => locationInput.current.focus()}
-            value={imageInfo.name}
+            value={post.name}
             returnKeyType={"next"}
           />
 
@@ -97,22 +157,27 @@ export default function CreatePostsScreen() {
               onFocus={handleInputFocus}
               onBlur={handleInputBlur}
               onChangeText={value => {
-                setImageInfo(prevState => ({ ...prevState, location: value }));
+                setPost(prevState => ({ ...prevState, location: value }));
               }}
-              value={imageInfo.location}
+              value={post.location}
               ref={locationInput}
             />
             <Feather name="map-pin" size={24} color="#BDBDBD" style={styles.locationIcon} />
           </View>
         </View>
 
-        <TouchableOpacity style={styles.publishBtn} activeOpacity={0.7} onPress={handlePublish}>
+        <TouchableOpacity
+          style={[styles.publishBtn, isPublishDisabled && { opacity: 0.5 }]}
+          activeOpacity={0.7}
+          onPress={handlePublish}
+          disabled={isPublishDisabled}
+        >
           <Text style={styles.publishBtnText}>Publish</Text>
         </TouchableOpacity>
 
         {!isKeyboardShown && (
           <View style={styles.removeBtnWrapper}>
-            <TouchableOpacity style={styles.removeBtn} activeOpacity={0.7}>
+            <TouchableOpacity style={styles.removeBtn} activeOpacity={0.7} onPress={handleErase}>
               <Feather name="trash-2" size={24} color="#BDBDBD" />
             </TouchableOpacity>
           </View>
@@ -129,7 +194,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     paddingHorizontal: 16,
   },
-  imageWrapper: {
+  camera: {
     justifyContent: "center",
     alignItems: "center",
     marginTop: 32,
@@ -137,6 +202,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "#E8E8E8",
+    overflow: "hidden",
   },
   addImageBtn: {
     width: 60,
