@@ -81,3 +81,4 @@ export const posts = [
     location: { title: "Italy", coords: { latitude: 41.8719, longitude: 12.5674 } },
   },
 ];
+

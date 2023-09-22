@@ -10,6 +10,10 @@ export default function HomePost({ item, navigation }) {
     navigation.navigate("Comments", { postId: item.id });
   };
 
+  const handleLocationPress = () => {
+    navigation.navigate("Map", { coords: item.location.coords });
+  };
+
   return (
     <View style={styles.container}>
       <Image
@@ -29,7 +33,12 @@ export default function HomePost({ item, navigation }) {
           <Text style={{ ...styles.detailsText, marginLeft: 6 }}>{item.comments.length}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.detailWrapper} activeOpacity={0.6}>
+        <TouchableOpacity
+          style={styles.detailWrapper}
+          activeOpacity={0.6}
+          onPress={handleLocationPress}
+          disabled={!item.location.coords}
+        >
           <Feather name="map-pin" size={24} color="#BDBDBD" style={{ marginLeft: "auto" }} />
           <Text style={{ ...styles.detailsText, marginLeft: 4, textDecorationLine: "underline" }}>
             {item.location.title}

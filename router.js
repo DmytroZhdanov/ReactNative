@@ -11,6 +11,7 @@ import ProfileScreen from "./Screens/ProfileScreen";
 import CommentsScreen from "./Screens/CommentsScreen";
 import CameraScreen from "./Screens/CameraScreen";
 import SnapPreviewScreen from "./Screens/SnapPreviewScreen";
+import MapScreen from "./Screens/MapScreen";
 
 // icon import
 import { Feather } from "@expo/vector-icons";
@@ -35,6 +36,14 @@ const createPostsScreenOptions = {
   headerLeftContainerStyle: { paddingHorizontal: 16, paddingVertical: 10 },
 };
 
+const mapScreenOptions = {
+  headerTitleStyle: { display: "none" },
+  headerTransparent: true,
+  headerBackTitleVisible: false,
+  headerBackImage: () => <Feather name="arrow-left" size={24} color="#212121" />,
+  headerLeftContainerStyle: { paddingHorizontal: 16, paddingVertical: 10 },
+};
+
 export default function useRouter(isAuth) {
   // Temporary solution to handle login and logout. Will be deleted after authorization implementation
   return (
@@ -52,6 +61,7 @@ export default function useRouter(isAuth) {
       <Stack.Screen name="Login" component={LoginScreen} options={headerOptions} />
       <Stack.Screen name="Camera" component={CameraScreen} options={headerOptions} />
       <Stack.Screen name="SnapPreview" component={SnapPreviewScreen} options={headerOptions} />
+      <Stack.Screen name="Map" component={MapScreen} options={mapScreenOptions} />
     </Stack.Navigator>
   );
 
