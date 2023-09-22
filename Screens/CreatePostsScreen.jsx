@@ -40,8 +40,6 @@ export default function CreatePostsScreen() {
   const [mediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
   const [locationPermission, requestLocationPermission] = Location.useForegroundPermissions();
 
-  const windowWidth = Dimensions.get("window").width;
-
   useEffect(() => {
     params && params.uri && setPost(prevState => ({ ...prevState, image: params.uri }));
     params &&
@@ -114,33 +112,22 @@ export default function CreatePostsScreen() {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-        {post.image !== "" ? (
-          <Image
-            src={post.image}
-            style={{
-              ...styles.camera,
-              width: windowWidth - 32,
-              height: (windowWidth - 32) / 1.43,
-            }}
-          />
-        ) : (
-          <Camera
-            style={{
-              ...styles.camera,
-              width: windowWidth - 32,
-              height: (windowWidth - 32) / 1.43,
-            }}
-          >
-            <TouchableOpacity
-              style={styles.addImageBtn}
-              onPress={() => {
-                navigation.navigate("Camera");
-              }}
-            >
-              <FontAwesome name="camera" size={24} color="#BDBDBD" />
-            </TouchableOpacity>
-          </Camera>
-        )}
+        <View style={styles.cameraWrapper}>
+          {post.image !== "" ? (
+            <Image src={post.image} style={styles.camera} />
+          ) : (
+            <Camera style={styles.camera}>
+              <TouchableOpacity
+                style={styles.addImageBtn}
+                onPress={() => {
+                  navigation.navigate("Camera");
+                }}
+              >
+                <FontAwesome name="camera" size={24} color="#BDBDBD" />
+              </TouchableOpacity>
+            </Camera>
+          )}
+        </View>
         <TouchableOpacity activeOpacity={0.7} onPress={uploadImage}>
           <Text style={styles.text}>Upload image</Text>
         </TouchableOpacity>
@@ -207,15 +194,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     paddingHorizontal: 16,
   },
-  camera: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 32,
-    backgroundColor: "#F6F6F6",
+  cameraWrapper: {
     borderRadius: 8,
+    overflow: "hidden",
+    width: Dimensions.get("window").width - 32,
+    height: (Dimensions.get("window").width - 32) / 1.43,
     borderWidth: 1,
     borderColor: "#E8E8E8",
-    overflow: "hidden",
+    marginTop: 32,
+  },
+  camera: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F6F6F6",
   },
   addImageBtn: {
     width: 60,

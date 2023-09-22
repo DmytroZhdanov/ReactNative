@@ -5,21 +5,14 @@ import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "rea
 import { Ionicons } from "@expo/vector-icons";
 
 export default function SnapPreviewScreen() {
-  const windowWidth = Dimensions.get("window").width;
-
   const navigation = useNavigation();
   const { uri, coords } = useRoute().params;
 
   return (
     <View style={styles.container}>
-      <Image
-        style={{
-          ...styles.image,
-          width: windowWidth - 32,
-          height: (windowWidth - 32) / 1.43,
-        }}
-        src={uri}
-      />
+      <View style={styles.imageWrapper}>
+        <Image style={styles.image} src={uri} />
+      </View>
       <View style={styles.btnWrapper}>
         <TouchableOpacity
           style={{ ...styles.btn, ...styles.backBtn }}
@@ -54,9 +47,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 200,
   },
-  image: {
+  imageWrapper: {
     borderRadius: 8,
     overflow: "hidden",
+    width: Dimensions.get("window").width - 32,
+    height: (Dimensions.get("window").width - 32) / 1.43,
+    borderWidth: 1,
+    borderColor: "#E8E8E8",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
   },
   btnWrapper: {
     width: "100%",
@@ -65,9 +66,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   btn: {
+    height: 60,
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: "50%",
+    borderRadius: 30,
   },
   backBtn: {
     borderWidth: 1,
@@ -82,6 +84,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: "Roboto-Regular",
-    fontSize: 16,
+    fontSize: 20,
   },
 });
