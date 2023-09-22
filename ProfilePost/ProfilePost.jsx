@@ -11,6 +11,10 @@ export default function ProfilePost({ item, navigation }) {
     navigation.navigate("Comments", { postId: item.id });
   };
 
+  const handleLocationPress = () => {
+    navigation.navigate("Map", { coords: item.location.coords });
+  };
+
   return (
     <View style={styles.container}>
       <Image
@@ -35,7 +39,12 @@ export default function ProfilePost({ item, navigation }) {
           <Text style={{ ...styles.detailsText, marginLeft: 6 }}>{item.likes}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={{ ...styles.detailsItem, marginLeft: "auto" }} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={{ ...styles.detailsItem, marginLeft: "auto" }}
+          activeOpacity={0.7}
+          onPress={handleLocationPress}
+          disabled={!item.location.coords}
+        >
           <Feather name="map-pin" size={24} color="#BDBDBD" />
           <Text style={{ ...styles.detailsText, marginLeft: 4, textDecorationLine: "underline" }}>
             {item.location.title}
