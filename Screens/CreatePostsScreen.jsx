@@ -26,7 +26,6 @@ const initialState = {
 };
 
 export default function CreatePostsScreen() {
-  const [windowWidth, setWindowWidth] = useState(Dimensions.get("window").width);
   const [post, setPost] = useState(initialState);
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const [isPublishDisabled, setIsPublishDisabled] = useState(true);
@@ -38,6 +37,8 @@ export default function CreatePostsScreen() {
 
   const [cameraPermission, requestCameraPermission] = Camera.useCameraPermissions();
   const [mediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
+
+  const windowWidth = Dimensions.get("window").width;
 
   if (!cameraPermission) {
     (async () => {
@@ -53,15 +54,6 @@ export default function CreatePostsScreen() {
 
   useEffect(() => {
     params && params.uri && setPost(prevState => ({ ...prevState, imageUri: params.uri }));
-
-    const onChange = () => {
-      const width = Dimensions.get("window").width;
-      setWindowWidth(width);
-    };
-    // Dimensions.addEventListener("change", onChange);
-    // return () => {
-    //   Dimensions.removeEventListener("change", onChange);
-    // };
   }, []);
 
   useEffect(() => {
