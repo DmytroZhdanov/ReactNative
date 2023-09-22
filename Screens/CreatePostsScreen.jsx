@@ -14,15 +14,16 @@ import {
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
+import * as Location from "expo-location";
 
 // icons import
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
 const initialState = {
-  imageUri: "",
+  image: "",
   name: "",
-  location: "",
+  location: { title: "", coords: { latitude: 0, longitude: 0 } },
 };
 
 export default function CreatePostsScreen() {
@@ -37,27 +38,40 @@ export default function CreatePostsScreen() {
 
   const [cameraPermission, requestCameraPermission] = Camera.useCameraPermissions();
   const [mediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
+  const [locationPermission, requestLocationPermission] = Location.useForegroundPermissions();
 
   const windowWidth = Dimensions.get("window").width;
 
-  if (!cameraPermission) {
-    (async () => {
-      await Camera.requestCameraPermissionsAsync();
-    })();
-  }
-
-  if (!mediaLibraryPermission) {
-    (async () => {
-      await MediaLibrary.requestPermissionsAsync();
-    })();
-  }
-
   useEffect(() => {
-    params && params.uri && setPost(prevState => ({ ...prevState, imageUri: params.uri }));
+    params && params.uri && setPost(prevState => ({ ...prevState, image: params.uri }));
+    params &&
+      params.coords &&
+      setPost(prevState => ({
+        ...prevState,
+        location: { ...prevState.location, coords: params.coords },
+      }));
+
+    if (!cameraPermission) {
+      (async () => {
+        await Camera.requestCameraPermissionsAsync();
+      })();
+    }
+
+    if (!mediaLibraryPermission) {
+      (async () => {
+        await MediaLibrary.requestPermissionsAsync();
+      })();
+    }
+
+    if (!locationPermission) {
+      (async () => {
+        await Location.requestForegroundPermissionsAsync();
+      })();
+    }
   }, []);
 
   useEffect(() => {
-    setIsPublishDisabled(post.imageUri === "" || post.name === "" || post.location === "");
+    setIsPublishDisabled(post.image === "" || post.name === "" || post.location.title === "");
   }, [post]);
 
   const uploadImage = async () => {
@@ -90,14 +104,14 @@ export default function CreatePostsScreen() {
   const handleErase = () => {
     setPost(initialState);
     navigation.replace("Home");
-  }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-        {post.imageUri !== "" ? (
+        {post.image !== "" ? (
           <Image
-            src={post.imageUri}
+            src={post.image}
             style={{
               ...styles.camera,
               width: windowWidth - 32,
@@ -149,9 +163,9 @@ export default function CreatePostsScreen() {
               onFocus={handleInputFocus}
               onBlur={handleInputBlur}
               onChangeText={value => {
-                setPost(prevState => ({ ...prevState, location: value }));
+                setPost(prevState => ({ ...prevState, location: { ...prevState.location, title: value } }));
               }}
-              value={post.location}
+              value={post.location.title}
               ref={locationInput}
             />
             <Feather name="map-pin" size={24} color="#BDBDBD" style={styles.locationIcon} />

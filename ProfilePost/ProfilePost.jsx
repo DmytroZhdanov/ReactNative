@@ -38,7 +38,7 @@ export default function ProfilePost({ item, navigation }) {
         <TouchableOpacity style={{ ...styles.detailsItem, marginLeft: "auto" }} activeOpacity={0.7}>
           <Feather name="map-pin" size={24} color="#BDBDBD" />
           <Text style={{ ...styles.detailsText, marginLeft: 4, textDecorationLine: "underline" }}>
-            {item.location}
+            {item.location.title}
           </Text>
         </TouchableOpacity>
       </View>

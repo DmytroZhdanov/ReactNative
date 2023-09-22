@@ -3,6 +3,7 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useEffect, useState } from "react";
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
+import * as Location from "expo-location";
 
 // icons import
 import { MaterialIcons } from "@expo/vector-icons";
@@ -41,8 +42,11 @@ export default function CameraScreen() {
 
   const handleSnap = async () => {
     const { uri } = await cameraRef.takePictureAsync();
+    const {
+      coords: { latitude, longitude },
+    } = await Location.getCurrentPositionAsync();
 
-    navigation.navigate("SnapPreview", { uri });
+    navigation.navigate("SnapPreview", { uri, coords: { latitude, longitude } });
   };
 
   const handleFlipCamera = () => {

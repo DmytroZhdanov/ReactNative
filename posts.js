@@ -46,7 +46,7 @@ export const posts = [
       },
     ],
     likes: 53,
-    location: "Ukraine",
+    location: { title: "Ukraine", coords: { latitude: 48.3794, longitude: 31.1656 } },
   },
   {
     id: 2,
@@ -70,7 +70,7 @@ export const posts = [
       },
     ],
     likes: 200,
-    location: "Ukraine",
+    location: { title: "Ukraine", coords: { latitude: 48.3794, longitude: 31.1656 } },
   },
   {
     id: 3,
@@ -78,6 +78,6 @@ export const posts = [
     name: "Old house in Venice",
     comments: [],
     likes: 200,
-    location: "Italy",
+    location: { title: "Italy", coords: { latitude: 41.8719, longitude: 12.5674 } },
   },
 ];

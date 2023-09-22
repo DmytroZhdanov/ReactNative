@@ -32,7 +32,7 @@ export default function HomePost({ item, navigation }) {
         <TouchableOpacity style={styles.detailWrapper} activeOpacity={0.6}>
           <Feather name="map-pin" size={24} color="#BDBDBD" style={{ marginLeft: "auto" }} />
           <Text style={{ ...styles.detailsText, marginLeft: 4, textDecorationLine: "underline" }}>
-            {item.location}
+            {item.location.title}
           </Text>
         </TouchableOpacity>
       </View>

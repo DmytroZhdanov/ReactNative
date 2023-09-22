@@ -8,7 +8,7 @@ export default function SnapPreviewScreen() {
   const windowWidth = Dimensions.get("window").width;
 
   const navigation = useNavigation();
-  const { uri } = useRoute().params;
+  const { uri, coords } = useRoute().params;
 
   return (
     <View style={styles.container}>
@@ -37,7 +37,7 @@ export default function SnapPreviewScreen() {
         <TouchableOpacity
           style={{ ...styles.btn, ...styles.doneBtn }}
           activeOpacity={0.7}
-          onPress={() => navigation.replace("CreatePosts", { uri })}
+          onPress={() => navigation.replace("CreatePosts", { uri, coords })}
         >
           <Text style={{ ...styles.text, color: "#ffffff" }}>Done</Text>
           <Ionicons name="checkmark-done" size={24} color="#ffffff" style={{ marginLeft: 16 }} />
