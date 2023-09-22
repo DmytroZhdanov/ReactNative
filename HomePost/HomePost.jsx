@@ -1,22 +1,10 @@
-import { useEffect, useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 // icon import
 import { Feather } from "@expo/vector-icons";
 
 export default function HomePost({ item, navigation }) {
-  const [windowWidth, setWindowWidth] = useState(Dimensions.get("window").width);
-
-  useEffect(() => {
-    const onChange = () => {
-      const width = Dimensions.get("window").width;
-      setWindowWidth(width);
-    };
-    Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
-  }, []);
+  const windowWidth = Dimensions.get("window").width;
 
   const handleCommentsPress = () => {
     navigation.navigate("Comments", { postId: item.id });

@@ -182,7 +182,6 @@ export default function CreatePostsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "stretch",
     backgroundColor: "#ffffff",
     paddingHorizontal: 16,
   },

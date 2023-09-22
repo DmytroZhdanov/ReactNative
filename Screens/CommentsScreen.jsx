@@ -29,21 +29,8 @@ export default function CommentsScreen() {
   const { postId } = useRoute().params;
   const post = posts.find(post => post.id === postId);
 
-  const [windowWidth, setWindowWidth] = useState(Dimensions.get("window").width);
-  const [windowHeight, setWindowHeight] = useState(Dimensions.get("window").height);
-
-  useEffect(() => {
-    const onChange = () => {
-      const width = Dimensions.get("window").width;
-      const height = Dimensions.get("window").height;
-      setWindowWidth(width);
-      setWindowHeight(height);
-    };
-    Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
-  }, []);
+  const windowWidth = Dimensions.get("window").width;
+  const windowHeight = Dimensions.get("window").height;
 
   const handleCommentSend = () => {
     Keyboard.dismiss();
@@ -63,7 +50,7 @@ export default function CommentsScreen() {
         <>
           <FlatList
             data={post.comments}
-            renderItem={({ item }) => <Comment item={item} windowWidth={windowWidth} />}
+            renderItem={({ item }) => <Comment item={item} />}
             ListHeaderComponent={
               <Image
                 source={post.image}
@@ -127,7 +114,6 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    // maxHeight: 100,
     backgroundColor: "#F6F6F6",
     borderWidth: 1,
     borderColor: "#E8E8E8",

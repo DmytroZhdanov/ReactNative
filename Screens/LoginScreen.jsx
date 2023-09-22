@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   View,
   ImageBackground,
@@ -25,22 +25,11 @@ export default function RegistrationScreen() {
   const [user, setUser] = useState(initialState);
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const [isPasswordShown, setIsPasswordShown] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(Dimensions.get("window").width);
+  const windowWidth = Dimensions.get("window").width;
 
   const passwordInput = useRef(null);
 
   const navigation = useNavigation();
-
-  useEffect(() => {
-    const onChange = () => {
-      const width = Dimensions.get("window").width;
-      setWindowWidth(width);
-    };
-    Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
-  }, []);
 
   const handleInputFocus = input => {
     setIsKeyboardShown(true);
@@ -153,13 +142,18 @@ export default function RegistrationScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   background: {
     flex: 1,
     resizeMode: "cover",
     justifyContent: "flex-end",
   },
-  formWrapper: { paddingTop: 81 },
+  formWrapper: {
+    paddingTop: 81,
+  },
   form: {
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,

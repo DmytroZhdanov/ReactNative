@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 // icon import
@@ -7,18 +7,7 @@ import { Feather } from "@expo/vector-icons";
 
 export default function ProfileListHeader() {
   const [userImage, setUserImage] = useState(require("../assets/images/userImage.jpg"));
-  const [windowWidth, setWindowWidth] = useState(Dimensions.get("window").width);
-
-  useEffect(() => {
-    const onChange = () => {
-      const width = Dimensions.get("window").width;
-      setWindowWidth(width);
-    };
-    Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
-  }, []);
+  const windowWidth = Dimensions.get("window").width;
 
   const handleUserImagePress = () => {
     userImage ? setUserImage(null) : setUserImage(require("../assets/images/userImage.jpg"));

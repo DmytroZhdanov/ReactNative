@@ -32,23 +32,12 @@ export default function RegistrationScreen() {
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const [isPasswordShown, setIsPasswordShown] = useState(false);
 
-  const [windowWidth, setWindowWidth] = useState(Dimensions.get("window").width);
+  const windowWidth = Dimensions.get("window").width;
 
   const emailInput = useRef(null);
   const passwordInput = useRef(null);
 
   const navigation = useNavigation();
-
-  useEffect(() => {
-    const onChange = () => {
-      const width = Dimensions.get("window").width;
-      setWindowWidth(width);
-    };
-    Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
-  }, []);
 
   const handleUserImagePress = () => {
     userImage ? setUserImage(null) : setUserImage(require("../assets/images/userImage.jpg"));
@@ -200,7 +189,10 @@ export default function RegistrationScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   background: {
     flex: 1,
     resizeMode: "cover",

@@ -1,6 +1,8 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 
-export default function Comment({ item, windowWidth }) {
+export default function Comment({ item }) {
+  const windowWidth = Dimensions.get("window").width;
+  
   // Temporary solution for styling comment item
   const isAuthorizedUser = false;
 
