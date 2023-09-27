@@ -1,16 +1,23 @@
 import { useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useDispatch } from "react-redux";
+import { logOutUser } from "../../redux/auth/authOperations";
 
 // icon import
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
 export default function ProfileListHeader() {
-  const [userImage, setUserImage] = useState(require("../assets/images/userImage.jpg"));
+  const [userImage, setUserImage] = useState(require("../../assets/images/userImage.jpg"));
   const windowWidth = Dimensions.get("window").width;
+  const dispatch = useDispatch();
 
   const handleUserImagePress = () => {
-    userImage ? setUserImage(null) : setUserImage(require("../assets/images/userImage.jpg"));
+    userImage ? setUserImage(null) : setUserImage(require("../../assets/images/userImage.jpg"));
+  };
+
+  const handleLogout = () => {
+    dispatch(logOutUser());
   };
 
   return (
@@ -36,7 +43,7 @@ export default function ProfileListHeader() {
             </View>
           )}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.logoutBtn}>
+        <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
           <Feather name="log-out" size={24} color="#BDBDBD" />
         </TouchableOpacity>
         <Text style={styles.userName}>Natali Romanova</Text>

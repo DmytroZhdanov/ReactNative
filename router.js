@@ -45,40 +45,21 @@ const mapScreenOptions = {
 };
 
 export default function useRouter(isAuth) {
-  // Temporary solution to handle login and logout. Will be deleted after authorization implementation
-  return (
+  return isAuth ? (
     <Stack.Navigator>
       <Stack.Screen name="Home" component={Home} options={headerOptions} />
       <Stack.Screen name="Posts" component={PostsScreen} options={headerOptions} />
-      <Stack.Screen
-        name="CreatePosts"
-        component={CreatePostsScreen}
-        options={createPostsScreenOptions}
-      />
+      <Stack.Screen name="CreatePosts" component={CreatePostsScreen} options={headerOptions} />
       <Stack.Screen name="Profile" component={ProfileScreen} options={headerOptions} />
       <Stack.Screen name="Comments" component={CommentsScreen} options={commentsScreenOptions} />
-      <Stack.Screen name="Register" component={RegistrationScreen} options={headerOptions} />
-      <Stack.Screen name="Login" component={LoginScreen} options={headerOptions} />
       <Stack.Screen name="Camera" component={CameraScreen} options={headerOptions} />
       <Stack.Screen name="SnapPreview" component={SnapPreviewScreen} options={headerOptions} />
       <Stack.Screen name="Map" component={MapScreen} options={mapScreenOptions} />
     </Stack.Navigator>
+  ) : (
+    <Stack.Navigator>
+      <Stack.Screen name="Register" component={RegistrationScreen} options={headerOptions} />
+      <Stack.Screen name="Login" component={LoginScreen} options={headerOptions} />
+    </Stack.Navigator>
   );
-
-  // Working solution. Will be uncommented after authorization implementation
-  // return isAuth ? (
-  //   <Stack.Navigator>
-  //     <Stack.Screen name="Home" component={Home} options={headerOptions} />
-  //     <Stack.Screen name="Posts" component={PostsScreen} options={headerOptions} />
-  //     <Stack.Screen name="CreatePosts" component={CreatePostsScreen} options={headerOptions} />
-  //     <Stack.Screen name="Profile" component={ProfileScreen} options={headerOptions} />
-  //     <Stack.Screen name="Comments" component={CommentsScreen} options={commentsScreenOptions} />
-  //     <Stack.Screen name="Camera" component={CameraScreen} options={headerOptions} />;
-  //   </Stack.Navigator>
-  // ) : (
-  //   <Stack.Navigator>
-  //     <Stack.Screen name="Register" component={RegistrationScreen} options={headerOptions} />
-  //     <Stack.Screen name="Login" component={LoginScreen} options={headerOptions} />
-  //   </Stack.Navigator>
-  // );
 }

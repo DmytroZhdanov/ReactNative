@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { View, ImageBackground, StyleSheet, FlatList } from "react-native";
 
-import ProfilePost from "../ProfilePost/ProfilePost";
-import ProfileListHeader from "../ProfileListHeader/ProfileListHeader";
-import ProfileListEmpty from "../ProfileListEmpty/ProfileListEmpty";
+import ProfilePost from "../components/ProfilePost/ProfilePost";
+import ProfileListHeader from "../components/ProfileListHeader/ProfileListHeader";
+import ProfileListEmpty from "../components/ProfileListEmpty/ProfileListEmpty";
 
 // Temporary solution as db
 import { posts } from "../posts";

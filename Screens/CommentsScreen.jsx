@@ -13,8 +13,8 @@ import {
   View,
 } from "react-native";
 
-import Comment from "../Comment/Comment";
-import CommentsListEmpty from "../CommentsListEmpty/CommentsListEmpty";
+import Comment from "../components/Comment/Comment";
+import CommentsListEmpty from "../components/CommentsListEmpty/CommentsListEmpty";
 
 // icon import
 import { Feather } from "@expo/vector-icons";

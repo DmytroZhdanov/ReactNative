@@ -9,11 +9,14 @@ import ProfileScreen from "./ProfileScreen";
 // icons import
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { logOutUser } from "../redux/auth/authOperations";
 
 const Tabs = createBottomTabNavigator();
 
 export default function Home() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const tabBarOptions = {
     common: {
@@ -66,7 +69,7 @@ export default function Home() {
   };
 
   const handleLogout = () => {
-    navigation.navigate("Login");
+    dispatch(logOutUser());
   };
 
   return (

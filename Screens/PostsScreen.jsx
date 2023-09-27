@@ -1,14 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
 import { FlatList, Image, StyleSheet, Text, View } from "react-native";
 
-import HomePost from "../HomePost/HomePost";
+import HomePost from "../components/HomePost/HomePost";
 
 // Temporary solution as db
 import { posts } from "../posts";
+
 const userImage = require("../assets/images/userImage.jpg");
 
 export default function PostsScreen() {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -21,7 +22,11 @@ export default function PostsScreen() {
           <Text style={styles.userEmail}>email@example.com</Text>
         </View>
       </View>
-      <FlatList data={posts} renderItem={({ item }) => <HomePost item={item} navigation={navigation} />} keyExtractor={item => item.id} />
+      <FlatList
+        data={posts}
+        renderItem={({ item }) => <HomePost item={item} navigation={navigation} />}
+        keyExtractor={item => item.id}
+      />
     </View>
   );
 }

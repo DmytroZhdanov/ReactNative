@@ -14,6 +14,8 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { logInUser } from "../redux/auth/authOperations";
 
 const initialState = {
   email: "",
@@ -25,11 +27,12 @@ export default function RegistrationScreen() {
   const [user, setUser] = useState(initialState);
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const [isPasswordShown, setIsPasswordShown] = useState(false);
-  const windowWidth = Dimensions.get("window").width;
 
   const passwordInput = useRef(null);
 
   const navigation = useNavigation();
+
+  const dispatch = useDispatch();
 
   const handleInputFocus = input => {
     setIsKeyboardShown(true);
@@ -42,11 +45,8 @@ export default function RegistrationScreen() {
   };
 
   const handleSubmit = () => {
-    console.log(user);
+    dispatch(logInUser(user));
     setUser(initialState);
-
-    // Temporary solution to handle login and logout. Will be deleted after authorization implementation
-    navigation.navigate("Home");
   };
 
   return (

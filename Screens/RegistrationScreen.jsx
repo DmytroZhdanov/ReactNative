@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   View,
   ImageBackground,
@@ -17,6 +17,9 @@ import {
 // icon import
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+
+import { registerUser } from "../redux/auth/authOperations";
 
 const initialState = {
   login: "",
@@ -39,6 +42,8 @@ export default function RegistrationScreen() {
 
   const navigation = useNavigation();
 
+  const dispatch = useDispatch();
+
   const handleUserImagePress = () => {
     userImage ? setUserImage(null) : setUserImage(require("../assets/images/userImage.jpg"));
   };
@@ -54,11 +59,8 @@ export default function RegistrationScreen() {
   };
 
   const handleSubmit = () => {
-    console.log(user);
+    dispatch(registerUser(user));
     setUser(initialState);
-
-    // Temporary solution to handle login and logout. Will be deleted after authorization implementation
-    navigation.navigate("Home");
   };
 
   return (
