@@ -1,15 +1,20 @@
 import { useNavigation } from "@react-navigation/native";
 import { FlatList, Image, StyleSheet, Text, View } from "react-native";
+import { useSelector } from "react-redux";
 
 import HomePost from "../components/HomePost/HomePost";
 
 // Temporary solution as db
 import { posts } from "../posts";
+import { selectEmail, selectNickName } from "../redux/auth/authSelectors";
 
 const userImage = require("../assets/images/userImage.jpg");
 
 export default function PostsScreen() {
   const navigation = useNavigation();
+
+  const userNickName = useSelector(selectNickName)
+  const userEmail = useSelector(selectEmail)
 
   return (
     <View style={styles.container}>
@@ -18,8 +23,8 @@ export default function PostsScreen() {
           <Image source={userImage} alt={"User Image"} style={styles.userImage} />
         </View>
         <View style={styles.userInfo}>
-          <Text style={styles.userName}>Natali Romanova</Text>
-          <Text style={styles.userEmail}>email@example.com</Text>
+          <Text style={styles.userName}>{userNickName}</Text>
+          <Text style={styles.userEmail}>{userEmail}</Text>
         </View>
       </View>
       <FlatList

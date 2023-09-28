@@ -16,7 +16,7 @@ export const registerUser = ({ login, email, password }) =>
 
     const { uid, displayName } = user;
 
-    dispatch(updateUserProfile({ userId: uid, nickName: displayName }));
+    dispatch(updateUserProfile({ userId: uid, nickName: displayName, email }));
   });
 
 export const logInUser = ({ email, password }) =>
@@ -37,6 +37,7 @@ export const stateChangeUser = () =>
         const updatedUserProfile = {
           userId: user.uid,
           nickName: user.displayName,
+          email: user.email,
         };
 
         dispatch(updateUserProfile(updatedUserProfile));

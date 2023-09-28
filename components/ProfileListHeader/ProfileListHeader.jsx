@@ -7,7 +7,7 @@ import { logOutUser } from "../../redux/auth/authOperations";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
-export default function ProfileListHeader() {
+export default function ProfileListHeader({userNickName}) {
   const [userImage, setUserImage] = useState(require("../../assets/images/userImage.jpg"));
   const windowWidth = Dimensions.get("window").width;
   const dispatch = useDispatch();
@@ -46,7 +46,7 @@ export default function ProfileListHeader() {
         <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
           <Feather name="log-out" size={24} color="#BDBDBD" />
         </TouchableOpacity>
-        <Text style={styles.userName}>Natali Romanova</Text>
+        <Text style={styles.userName}>{userNickName}</Text>
       </View>
     </View>
   );
