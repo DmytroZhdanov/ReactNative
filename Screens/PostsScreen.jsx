@@ -6,21 +6,20 @@ import HomePost from "../components/HomePost/HomePost";
 
 // Temporary solution as db
 import { posts } from "../posts";
-import { selectEmail, selectNickName } from "../redux/auth/authSelectors";
-
-const userImage = require("../assets/images/userImage.jpg");
+import { selectEmail, selectNickName, selectUserPhoto } from "../redux/auth/authSelectors";
 
 export default function PostsScreen() {
   const navigation = useNavigation();
 
-  const userNickName = useSelector(selectNickName)
-  const userEmail = useSelector(selectEmail)
+  const userNickName = useSelector(selectNickName);
+  const userEmail = useSelector(selectEmail);
+  const userPhoto = useSelector(selectUserPhoto);
 
   return (
     <View style={styles.container}>
       <View style={styles.user}>
         <View style={styles.photoWrapper}>
-          <Image source={userImage} alt={"User Image"} style={styles.userImage} />
+          <Image source={{ uri: userPhoto }} alt={"User Image"} style={styles.userImage} />
         </View>
         <View style={styles.userInfo}>
           <Text style={styles.userName}>{userNickName}</Text>
@@ -53,6 +52,7 @@ const styles = StyleSheet.create({
   userImage: {
     width: 60,
     height: 60,
+    backgroundColor: "#f6f6f6",
   },
   userInfo: {
     marginLeft: 8,

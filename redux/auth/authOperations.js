@@ -4,19 +4,25 @@ import {
   updateProfile,
   onAuthStateChanged,
   signOut,
+  reload,
 } from "firebase/auth";
 import { auth } from "../../firebase/config";
 import { operationWrapper } from "../../utils/operationWrapper";
-import { updateUserProfile, updateAuthorization, resetState } from "./authSlice";
+import { uploadPhotoToServer } from "../../utils/uploadPhotoToServer";
+import { updateUserProfile, updateAuthorization, resetState, updateUserPhoto } from "./authSlice";
 
-export const registerUser = ({ login, email, password }) =>
+export const registerUser = ({ login, email, password, image }) =>
   operationWrapper(async (dispatch, getState) => {
     const { user } = await createUserWithEmailAndPassword(auth, email, password);
+
     await updateProfile(user, { displayName: login });
 
     const { uid, displayName } = user;
 
-    dispatch(updateUserProfile({ userId: uid, nickName: displayName, email }));
+    const photoURL = image ? await uploadPhotoToServer("userPhoto", image, uid) : undefined;
+    photoURL && (await updateProfile(user, { photoURL }));
+
+    dispatch(updateUserProfile({ userId: uid, nickName: displayName, email, userPhoto: photoURL }));
   });
 
 export const logInUser = ({ email, password }) =>
@@ -38,6 +44,7 @@ export const stateChangeUser = () =>
           userId: user.uid,
           nickName: user.displayName,
           email: user.email,
+          userPhoto: user.photoURL,
         };
 
         dispatch(updateUserProfile(updatedUserProfile));
@@ -46,4 +53,10 @@ export const stateChangeUser = () =>
         dispatch(updateAuthorization(false));
       }
     });
+  });
+
+export const updateProfilePhoto = (photo) =>
+  operationWrapper(async (dispatch, getState) => {
+    await updateProfile(auth.currentUser, { photoURL: photo });
+    dispatch(updateUserPhoto(photo));
   });

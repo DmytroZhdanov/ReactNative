@@ -1,4 +1,6 @@
 import { useRef, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
 import {
   View,
   ImageBackground,
@@ -14,26 +16,29 @@ import {
   Image,
 } from "react-native";
 
-// icon import
-import { AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import * as MediaLibrary from "expo-media-library";
+import * as ImagePicker from "expo-image-picker";
 
 import { registerUser } from "../redux/auth/authOperations";
+
+// icon import
+import { AntDesign } from "@expo/vector-icons";
 
 const initialState = {
   login: "",
   email: "",
   password: "",
+  image: null,
 };
 
 export default function RegistrationScreen() {
-  const [userImage, setUserImage] = useState(require("../assets/images/userImage.jpg"));
   const [user, setUser] = useState(initialState);
 
   const [focusedInput, setFocusedInput] = useState("none");
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const [isPasswordShown, setIsPasswordShown] = useState(false);
+
+  const [mediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
 
   const windowWidth = Dimensions.get("window").width;
 
@@ -45,7 +50,19 @@ export default function RegistrationScreen() {
   const dispatch = useDispatch();
 
   const handleUserImagePress = () => {
-    userImage ? setUserImage(null) : setUserImage(require("../assets/images/userImage.jpg"));
+    user.image ? setUser(prevState => ({ ...prevState, image: null })) : uploadImage();
+  };
+
+  const uploadImage = async () => {
+    if (!mediaLibraryPermission.granted) {
+      await MediaLibrary.requestPermissionsAsync();
+      if (!mediaLibraryPermission.granted) return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync();
+    if (result.canceled) return;
+
+    setUser(prevState => ({ ...prevState, image: result.assets[0].uri }));
   };
 
   const handleInputFocus = input => {
@@ -79,10 +96,14 @@ export default function RegistrationScreen() {
                     activeOpacity={0.8}
                     onPress={handleUserImagePress}
                   >
-                    {userImage ? (
+                    {user.image ? (
                       <>
                         <View style={styles.photoWrapper}>
-                          <Image source={userImage} alt={"User Image"} />
+                          <Image
+                            source={{ uri: user.image }}
+                            alt={"User Image"}
+                            style={styles.userPhoto}
+                          />
                         </View>
                         <View style={styles.iconWrapper}>
                           <AntDesign
@@ -220,8 +241,12 @@ const styles = StyleSheet.create({
     overflow: "visible",
   },
   photoWrapper: {
+    flex: 1,
     borderRadius: 16,
     overflow: "hidden",
+  },
+  userPhoto: {
+    flex: 1,
   },
   iconWrapper: {
     borderRadius: 12.5,

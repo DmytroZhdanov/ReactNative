@@ -1,19 +1,37 @@
-import { useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
-import { logOutUser } from "../../redux/auth/authOperations";
+import { logOutUser, updateProfilePhoto } from "../../redux/auth/authOperations";
+
+import * as MediaLibrary from "expo-media-library";
+import * as ImagePicker from "expo-image-picker";
 
 // icon import
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
-export default function ProfileListHeader({userNickName}) {
-  const [userImage, setUserImage] = useState(require("../../assets/images/userImage.jpg"));
-  const windowWidth = Dimensions.get("window").width;
+export default function ProfileListHeader({ userNickName, userPhoto }) {
   const dispatch = useDispatch();
 
+  const [mediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
+
+  const windowWidth = Dimensions.get("window").width;
+
   const handleUserImagePress = () => {
-    userImage ? setUserImage(null) : setUserImage(require("../../assets/images/userImage.jpg"));
+    userPhoto ? dispatch(updateProfilePhoto(undefined)) : uploadImage();
+  };
+
+  const uploadImage = async () => {
+    if (!mediaLibraryPermission.granted) {
+      await MediaLibrary.requestPermissionsAsync();
+      if (!mediaLibraryPermission.granted) return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync();
+    if (result.canceled) return;
+
+    const image = result.assets[0].uri;
+
+    dispatch(updateProfilePhoto(image));
   };
 
   const handleLogout = () => {
@@ -28,10 +46,10 @@ export default function ProfileListHeader({userNickName}) {
           activeOpacity={0.8}
           onPress={handleUserImagePress}
         >
-          {userImage ? (
+          {userPhoto ? (
             <>
               <View style={styles.photoWrapper}>
-                <Image source={userImage} alt={"User Image"} />
+                <Image source={{ uri: userPhoto }} alt={"User Image"} style={styles.userPhoto} />
               </View>
               <View style={styles.iconWrapper}>
                 <AntDesign style={styles.photoIcon} name="closecircleo" size={25} color="#E8E8E8" />
@@ -74,8 +92,12 @@ const styles = StyleSheet.create({
     overflow: "visible",
   },
   photoWrapper: {
+    flex: 1,
     borderRadius: 16,
     overflow: "hidden",
+  },
+  userPhoto: {
+    flex: 1,
   },
   iconWrapper: {
     borderRadius: 12.5,
