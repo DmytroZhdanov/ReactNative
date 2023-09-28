@@ -1,19 +1,36 @@
 import { useNavigation } from "@react-navigation/native";
+import { collection, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { FlatList, Image, StyleSheet, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 
 import HomePost from "../components/HomePost/HomePost";
+import { db } from "../firebase/config";
 
-// Temporary solution as db
-import { posts } from "../posts";
 import { selectEmail, selectNickName, selectUserPhoto } from "../redux/auth/authSelectors";
 
+// Temporary solution as db
+// import { posts } from "../posts";
+
 export default function PostsScreen() {
+  const [posts, setPosts] = useState(null);
+  console.log(posts);
   const navigation = useNavigation();
 
   const userNickName = useSelector(selectNickName);
   const userEmail = useSelector(selectEmail);
   const userPhoto = useSelector(selectUserPhoto);
+
+  const getAllPosts = async () => {
+    const reference = await collection(db, "posts");
+    await onSnapshot(reference, data =>
+      setPosts(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
+    );
+  };
+
+  useEffect(() => {
+    getAllPosts();
+  }, []);
 
   return (
     <View style={styles.container}>
