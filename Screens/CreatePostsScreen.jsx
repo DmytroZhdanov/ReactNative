@@ -12,18 +12,30 @@ import {
   Image,
 } from "react-native";
 import { Camera } from "expo-camera";
+import { useSelector } from "react-redux";
+
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
+
+import { addDoc, collection } from "firebase/firestore";
+
+import { db } from "../firebase/config";
+import { uploadPhotoToServer } from "../utils/uploadPhotoToServer";
+import { selectUserId } from "../redux/auth/authSelectors";
 
 // icons import
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
 const initialState = {
-  image: "",
-  name: "",
-  location: { title: "", coords: { latitude: 0, longitude: 0 } },
+  image: null,
+  name: null,
+  location: { title: null, coords: { latitude: 0, longitude: 0 } },
+  authorId: null,
+  likes: [],
+  comments: [],
+  cratedAt: null,
 };
 
 export default function CreatePostsScreen() {
@@ -39,6 +51,8 @@ export default function CreatePostsScreen() {
   const [cameraPermission, requestCameraPermission] = Camera.useCameraPermissions();
   const [mediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
   const [locationPermission, requestLocationPermission] = Location.useForegroundPermissions();
+
+  const userId = useSelector(selectUserId);
 
   useEffect(() => {
     params && params.uri && setPost(prevState => ({ ...prevState, image: params.uri }));
@@ -69,7 +83,7 @@ export default function CreatePostsScreen() {
   }, []);
 
   useEffect(() => {
-    setIsPublishDisabled(post.image === "" || post.name === "" || post.location.title === "");
+    setIsPublishDisabled(!post.image || !post.name || !post.location.title);
   }, [post]);
 
   const uploadImage = async () => {
@@ -97,11 +111,24 @@ export default function CreatePostsScreen() {
     setIsKeyboardShown(false);
   };
 
-  const handlePublish = () => {
-    console.log(post);
-    setPost(initialState);
+  const handlePublish = async () => {
+    const photoURL = await uploadPhotoToServer("postImage", post.image, userId);
+    const newPost = {
+      ...post,
+      image: photoURL,
+      authorId: userId,
+      createdAt: Date.now(),
+    };
 
+    uploadPostToServer(newPost);
+
+    setPost(initialState);
     navigation.replace("Home");
+  };
+
+  const uploadPostToServer = async post => {
+    const reference = await collection(db, "posts");
+    await addDoc(reference, post);
   };
 
   const handleErase = () => {
@@ -113,7 +140,7 @@ export default function CreatePostsScreen() {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <View style={styles.cameraWrapper}>
-          {post.image !== "" ? (
+          {post.image ? (
             <Image src={post.image} style={styles.camera} />
           ) : (
             <Camera style={styles.camera}>

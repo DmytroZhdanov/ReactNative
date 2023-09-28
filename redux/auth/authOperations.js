@@ -4,7 +4,6 @@ import {
   updateProfile,
   onAuthStateChanged,
   signOut,
-  reload,
 } from "firebase/auth";
 import { auth } from "../../firebase/config";
 import { operationWrapper } from "../../utils/operationWrapper";
@@ -55,7 +54,7 @@ export const stateChangeUser = () =>
     });
   });
 
-export const updateProfilePhoto = (photo) =>
+export const updateProfilePhoto = photo =>
   operationWrapper(async (dispatch, getState) => {
     await updateProfile(auth.currentUser, { photoURL: photo });
     dispatch(updateUserPhoto(photo));
