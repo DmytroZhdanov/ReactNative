@@ -1,6 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 import { View, ImageBackground, StyleSheet, FlatList } from "react-native";
 import { useSelector } from "react-redux";
+import { collection, onSnapshot } from "firebase/firestore";
+
+import { db } from "../firebase/config";
 
 import ProfilePost from "../components/ProfilePost/ProfilePost";
 import ProfileListHeader from "../components/ProfileListHeader/ProfileListHeader";
@@ -8,15 +12,29 @@ import ProfileListEmpty from "../components/ProfileListEmpty/ProfileListEmpty";
 
 import { selectNickName, selectUserId, selectUserPhoto } from "../redux/auth/authSelectors";
 
-// Temporary solution as db
-import { posts } from "../posts";
-
 export default function ProfileScreen() {
+  const [posts, setPosts] = useState(null);
+
   const navigation = useNavigation();
 
   const userNickName = useSelector(selectNickName);
   const userPhoto = useSelector(selectUserPhoto);
   const userId = useSelector(selectUserId);
+
+  const getAllPosts = async () => {
+    const reference = await collection(db, "posts");
+    await onSnapshot(reference, data =>
+      setPosts(
+        data.docs
+          .filter(doc => doc.data().authorId === userId)
+          .map(doc => ({ ...doc.data(), id: doc.id }))
+      )
+    );
+  };
+
+  useEffect(() => {
+    getAllPosts();
+  }, []);
 
   return (
     <View style={styles.container}>

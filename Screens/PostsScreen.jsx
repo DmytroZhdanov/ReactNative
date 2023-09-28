@@ -1,20 +1,18 @@
 import { useNavigation } from "@react-navigation/native";
-import { collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { FlatList, Image, StyleSheet, Text, View } from "react-native";
 import { useSelector } from "react-redux";
+import { collection, onSnapshot } from "firebase/firestore";
+
+import { db } from "../firebase/config";
 
 import HomePost from "../components/HomePost/HomePost";
-import { db } from "../firebase/config";
 
 import { selectEmail, selectNickName, selectUserPhoto } from "../redux/auth/authSelectors";
 
-// Temporary solution as db
-// import { posts } from "../posts";
-
 export default function PostsScreen() {
   const [posts, setPosts] = useState(null);
-  console.log(posts);
+
   const navigation = useNavigation();
 
   const userNickName = useSelector(selectNickName);

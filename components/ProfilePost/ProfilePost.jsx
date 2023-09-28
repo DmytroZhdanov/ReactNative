@@ -18,7 +18,7 @@ export default function ProfilePost({ item, navigation }) {
   return (
     <View style={styles.container}>
       <Image
-        source={item.image}
+        source={{ uri: item.image }}
         alt={item.name}
         style={{ ...styles.image, width: windowWidth - 32, height: (windowWidth - 32) / 1.43 }}
         resizeMode={"cover"}
