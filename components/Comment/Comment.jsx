@@ -1,14 +1,19 @@
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
+import { useSelector } from "react-redux";
+import { selectUserId } from "../../redux/auth/authSelectors";
+import { transformDate } from "../../utils/transformDate";
 
 export default function Comment({ item }) {
   const windowWidth = Dimensions.get("window").width;
-  
-  // Temporary solution for styling comment item
-  const isAuthorizedUser = false;
+
+  const userId = useSelector(selectUserId);
+  const isAuthorizedUser = item.author.id === userId;
+
+  const commentTime = transformDate(item.time);
 
   return (
     <View style={[styles.commentWrapper, isAuthorizedUser && { flexDirection: "row-reverse" }]}>
-      <Image source={item.author.image} style={styles.image} />
+      <Image source={{ uri: item.author.image }} style={styles.image} />
       <View
         style={[
           styles.commentContainer,
@@ -18,7 +23,7 @@ export default function Comment({ item }) {
       >
         <Text style={styles.commentText}>{item.text}</Text>
         <Text style={[styles.commentTime, !isAuthorizedUser && { textAlign: "right" }]}>
-          {item.time}
+          {commentTime}
         </Text>
       </View>
     </View>

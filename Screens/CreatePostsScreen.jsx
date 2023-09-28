@@ -34,8 +34,7 @@ const initialState = {
   location: { title: null, coords: { latitude: 0, longitude: 0 } },
   authorId: null,
   likes: [],
-  comments: [],
-  cratedAt: null,
+  createdAt: null,
 };
 
 export default function CreatePostsScreen() {

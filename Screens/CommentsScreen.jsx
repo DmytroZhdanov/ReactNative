@@ -1,5 +1,6 @@
 import { useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Dimensions,
   FlatList,
@@ -12,30 +13,71 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { addDoc, collection, onSnapshot } from "firebase/firestore";
+
+import { db } from "../firebase/config";
 
 import Comment from "../components/Comment/Comment";
 import CommentsListEmpty from "../components/CommentsListEmpty/CommentsListEmpty";
 
+import { selectNickName, selectUserId, selectUserPhoto } from "../redux/auth/authSelectors";
+
 // icon import
 import { Feather } from "@expo/vector-icons";
 
-// Temporary solution as db
-const { posts } = require("../posts");
-
 export default function CommentsScreen() {
+  const [post, setPost] = useState(null);
+  const [allComments, setAllComments] = useState([]);
   const [comment, setComment] = useState("");
   const [isInputFocused, setIsInputFocused] = useState(false);
 
+  const userId = useSelector(selectUserId);
+  const userPhoto = useSelector(selectUserPhoto);
+  const userName = useSelector(selectNickName);
+
   const { postId } = useRoute().params;
-  const post = posts.find(post => post.id === postId);
 
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
 
+  const getCurrentPost = async () => {
+    const reference = await collection(db, "posts");
+    await onSnapshot(reference, data =>
+      setPost(data.docs.filter(doc => doc.id === postId)[0].data())
+    );
+  };
+
+  const getAllComments = async () => {
+    const reference = await collection(db, `posts/${postId}/comments`);
+    await onSnapshot(reference, data => setAllComments(data.docs.map(doc => doc.data())));
+  };
+
+  useEffect(() => {
+    getCurrentPost();
+    getAllComments();
+  }, []);
+
   const handleCommentSend = () => {
     Keyboard.dismiss();
-    console.log(comment);
+
+    const newComment = {
+      author: {
+        id: userId,
+        name: userName,
+        image: userPhoto,
+      },
+      text: comment,
+      time: Date.now(),
+    };
+
+    addComment(newComment);
+
     setComment("");
+  };
+
+  const addComment = async comment => {
+    const reference = await collection(db, `posts/${postId}/comments`);
+    await addDoc(reference, comment);
   };
 
   return (
@@ -49,13 +91,17 @@ export default function CommentsScreen() {
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <>
           <FlatList
-            data={post.comments}
+            data={allComments}
             renderItem={({ item }) => <Comment item={item} />}
             ListHeaderComponent={
               <Image
-                source={post.image}
-                alt={post.name}
-                style={{ width: windowWidth - 32, borderRadius: 8 }}
+                source={{ uri: post?.image }}
+                alt={post?.name}
+                style={{
+                  width: windowWidth - 32,
+                  borderRadius: 8,
+                  height: (windowWidth - 32) / 1.43,
+                }}
                 resizeMode={"cover"}
               />
             }
