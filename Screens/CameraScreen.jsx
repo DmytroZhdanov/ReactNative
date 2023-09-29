@@ -39,7 +39,7 @@ export default function CameraScreen() {
 
     const info = await MediaLibrary.getAssetInfoAsync(result.assets[0].assetId);
 
-    navigation.navigate("SnapPreview", {
+    navigation.replace("SnapPreview", {
       uri: result.assets[0].uri,
       coords: info?.location || null,
     });
@@ -51,7 +51,7 @@ export default function CameraScreen() {
       coords: { latitude, longitude },
     } = await Location.getCurrentPositionAsync();
 
-    navigation.navigate("SnapPreview", { uri, coords: { latitude, longitude } });
+    navigation.replace("SnapPreview", { uri, coords: { latitude, longitude } });
   };
 
   const handleFlipCamera = () => {

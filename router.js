@@ -1,4 +1,3 @@
-// import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import "react-native-gesture-handler";
 
@@ -49,7 +48,11 @@ export default function useRouter(isAuth) {
     <Stack.Navigator>
       <Stack.Screen name="Home" component={Home} options={headerOptions} />
       <Stack.Screen name="Posts" component={PostsScreen} options={headerOptions} />
-      <Stack.Screen name="CreatePosts" component={CreatePostsScreen} options={headerOptions} />
+      <Stack.Screen
+        name="CreatePosts"
+        component={CreatePostsScreen}
+        options={createPostsScreenOptions}
+      />
       <Stack.Screen name="Profile" component={ProfileScreen} options={headerOptions} />
       <Stack.Screen name="Comments" component={CommentsScreen} options={commentsScreenOptions} />
       <Stack.Screen name="Camera" component={CameraScreen} options={headerOptions} />
