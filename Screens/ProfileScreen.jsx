@@ -51,7 +51,7 @@ export default function ProfileScreen() {
           style={styles.contentWrapper}
           ListEmptyComponent={ProfileListEmpty}
           ListFooterComponent={<></>}
-          ListFooterComponentStyle={styles.contentFooter}
+          ListFooterComponentStyle={[styles.contentFooter, posts?.length === 1 && {height: "100%"}]}
         />
       </ImageBackground>
     </View>
