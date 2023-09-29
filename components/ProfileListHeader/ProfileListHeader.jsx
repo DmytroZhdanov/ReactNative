@@ -8,8 +8,9 @@ import * as ImagePicker from "expo-image-picker";
 // icon import
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import { uploadPhotoToServer } from "../../utils/uploadPhotoToServer";
 
-export default function ProfileListHeader({ userNickName, userPhoto }) {
+export default function ProfileListHeader({ userNickName, userPhoto, userId }) {
   const dispatch = useDispatch();
 
   const [mediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
@@ -17,7 +18,7 @@ export default function ProfileListHeader({ userNickName, userPhoto }) {
   const windowWidth = Dimensions.get("window").width;
 
   const handleUserImagePress = () => {
-    userPhoto ? dispatch(updateProfilePhoto(undefined)) : uploadImage();
+    userPhoto ? dispatch(updateProfilePhoto("")) : uploadImage();
   };
 
   const uploadImage = async () => {
@@ -29,9 +30,10 @@ export default function ProfileListHeader({ userNickName, userPhoto }) {
     const result = await ImagePicker.launchImageLibraryAsync();
     if (result.canceled) return;
 
-    const image = result.assets[0].uri;
+    const { uri } = result.assets[0];
+    const url = await uploadPhotoToServer("userPhoto", uri, userId);
 
-    dispatch(updateProfilePhoto(image));
+    dispatch(updateProfilePhoto(url));
   };
 
   const handleLogout = () => {
@@ -46,7 +48,7 @@ export default function ProfileListHeader({ userNickName, userPhoto }) {
           activeOpacity={0.8}
           onPress={handleUserImagePress}
         >
-          {userPhoto ? (
+          {userPhoto || userPhoto !== "" ? (
             <>
               <View style={styles.photoWrapper}>
                 <Image source={{ uri: userPhoto }} alt={"User Image"} style={styles.userPhoto} />

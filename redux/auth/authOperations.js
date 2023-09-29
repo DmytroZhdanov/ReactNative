@@ -57,5 +57,5 @@ export const stateChangeUser = () =>
 export const updateProfilePhoto = photo =>
   operationWrapper(async (dispatch, getState) => {
     await updateProfile(auth.currentUser, { photoURL: photo });
-    dispatch(updateUserPhoto(photo));
+    dispatch(updateUserPhoto(photo || null));
   });
