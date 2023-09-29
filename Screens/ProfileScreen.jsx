@@ -1,6 +1,8 @@
-import { useNavigation } from "@react-navigation/native";
+// Component to render ProfileScreen
 import { useEffect, useState } from "react";
 import { View, ImageBackground, StyleSheet, FlatList } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 import { collection, onSnapshot } from "firebase/firestore";
 
 import { db } from "../firebase/config";
@@ -8,7 +10,7 @@ import { db } from "../firebase/config";
 import ProfilePost from "../components/ProfilePost/ProfilePost";
 import ProfileListHeader from "../components/ProfileListHeader/ProfileListHeader";
 import ProfileListEmpty from "../components/ProfileListEmpty/ProfileListEmpty";
-import { useSelector } from "react-redux";
+
 import { selectNickName, selectUserId, selectUserPhoto } from "../redux/auth/authSelectors";
 
 export default function ProfileScreen() {
@@ -20,9 +22,17 @@ export default function ProfileScreen() {
   const userNickName = useSelector(selectNickName);
   const userPhoto = useSelector(selectUserPhoto);
 
+  useEffect(() => {
+    getAllPosts();
+  }, []);
+
+  /**
+   * Get all posts published by current user from database and set it to component state
+   */
   const getAllPosts = async () => {
-    const reference = await collection(db, "posts");
-    await onSnapshot(reference, data =>
+    const reference = collection(db, "posts");
+
+    onSnapshot(reference, data =>
       setPosts(
         data.docs
           .filter(doc => doc.data().author.id === userId)
@@ -30,10 +40,6 @@ export default function ProfileScreen() {
       )
     );
   };
-
-  useEffect(() => {
-    getAllPosts();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -51,7 +57,10 @@ export default function ProfileScreen() {
           style={styles.contentWrapper}
           ListEmptyComponent={ProfileListEmpty}
           ListFooterComponent={<></>}
-          ListFooterComponentStyle={[styles.contentFooter, posts?.length === 1 && {height: "100%"}]}
+          ListFooterComponentStyle={[
+            styles.contentFooter,
+            posts?.length === 1 && { height: "100%" },
+          ]}
         />
       </ImageBackground>
     </View>

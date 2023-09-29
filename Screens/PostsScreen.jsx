@@ -1,6 +1,7 @@
-import { useNavigation } from "@react-navigation/native";
+// Component to render PostsScreen
 import { useEffect, useState } from "react";
 import { FlatList, Image, StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { collection, onSnapshot } from "firebase/firestore";
 
@@ -19,16 +20,17 @@ export default function PostsScreen() {
   const userEmail = useSelector(selectEmail);
   const userPhoto = useSelector(selectUserPhoto);
 
-  const getAllPosts = async () => {
-    const reference = await collection(db, "posts");
-    await onSnapshot(reference, data =>
-      setPosts(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
-    );
-  };
-
   useEffect(() => {
     getAllPosts();
   }, []);
+
+  /**
+   * Get all posts from database and set it to component state
+   */
+  const getAllPosts = async () => {
+    const reference = collection(db, "posts");
+    onSnapshot(reference, data => setPosts(data.docs.map(doc => ({ ...doc.data(), id: doc.id }))));
+  };
 
   return (
     <View style={styles.container}>
@@ -36,11 +38,13 @@ export default function PostsScreen() {
         <View style={styles.photoWrapper}>
           <Image source={{ uri: userPhoto }} alt={"User Image"} style={styles.userImage} />
         </View>
+        
         <View style={styles.userInfo}>
           <Text style={styles.userName}>{userNickName}</Text>
           <Text style={styles.userEmail}>{userEmail}</Text>
         </View>
       </View>
+      
       <FlatList
         data={posts}
         renderItem={({ item }) => <HomePost item={item} navigation={navigation} />}

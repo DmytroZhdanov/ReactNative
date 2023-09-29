@@ -1,6 +1,7 @@
+// Main component to load fonts and check authorization
+import { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { stateChangeUser } from "../../redux/auth/authOperations";
 import { selectIsAuth } from "../../redux/auth/authSelectors";

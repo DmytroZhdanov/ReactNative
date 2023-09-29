@@ -1,3 +1,4 @@
+// Component for rendering one post comment
 import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { selectUserId } from "../../redux/auth/authSelectors";
@@ -14,6 +15,7 @@ export default function Comment({ item }) {
   return (
     <View style={[styles.commentWrapper, isAuthorizedUser && { flexDirection: "row-reverse" }]}>
       <Image source={{ uri: item.author.image }} style={styles.image} />
+
       <View
         style={[
           styles.commentContainer,
@@ -22,6 +24,7 @@ export default function Comment({ item }) {
         ]}
       >
         <Text style={styles.commentText}>{item.text}</Text>
+
         <Text style={[styles.commentTime, !isAuthorizedUser && { textAlign: "right" }]}>
           {commentTime}
         </Text>

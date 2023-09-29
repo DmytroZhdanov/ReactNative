@@ -1,3 +1,8 @@
+/**
+ * Transform ms to appropriate date format
+ * @param {Number} ms number of ms to be converted into appropriate date format
+ * @returns String with appropriate date format
+ */
 export const transformDate = ms => {
   const time = new Date(ms);
 
@@ -10,6 +15,11 @@ export const transformDate = ms => {
   return `${day} ${month}, ${year} | ${hours}:${minutes}`;
 };
 
+/**
+ * Transform number of month to it's name
+ * @param {Number} number number of month from 0 to 11
+ * @returns String with name of month according to it's number
+ */
 const transformMonth = number => {
   switch (number) {
     case 0:

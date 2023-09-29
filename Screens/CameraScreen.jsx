@@ -1,22 +1,24 @@
-import { Camera } from "expo-camera";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+// Component to render CameraScreen
 import { useEffect, useState } from "react";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Camera } from "expo-camera";
+
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
 
-// icons import
+// icon import
 import { MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 
 export default function CameraScreen() {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [cameraRef, setCameraRef] = useState(null);
+  const [galleryImage, setGalleryImage] = useState(null);
 
   const navigation = useNavigation();
 
   const [mediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
-  const [galleryImage, setGalleryImage] = useState(null);
 
   useEffect(() => {
     if (mediaLibraryPermission) {
@@ -28,6 +30,10 @@ export default function CameraScreen() {
     }
   }, []);
 
+  /**
+   * Upload chosen image from media library and navigate to it preview on PreviewScreen for upcoming uploading to server and publishing
+   * @returns undefined if media library permission is not granted or user canceled operation to pick a new photo from media library
+   */
   const handleGalleryPress = async () => {
     if (!mediaLibraryPermission.granted) {
       await MediaLibrary.requestPermissionsAsync();
@@ -45,6 +51,9 @@ export default function CameraScreen() {
     });
   };
 
+  /**
+   * Taking picture from the camera navigate to it preview on PreviewScreen for upcoming uploading to server and publishing
+   */
   const handleSnap = async () => {
     const { uri } = await cameraRef.takePictureAsync();
     const {
@@ -54,6 +63,9 @@ export default function CameraScreen() {
     navigation.replace("SnapPreview", { uri, coords: { latitude, longitude } });
   };
 
+  /**
+   * Toggle camera type from back to front and vice versa
+   */
   const handleFlipCamera = () => {
     setType(
       type === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back
@@ -65,9 +77,11 @@ export default function CameraScreen() {
       <TouchableOpacity style={styles.gallery} onPress={handleGalleryPress}>
         {galleryImage && <Image src={galleryImage} style={styles.galleryImage} />}
       </TouchableOpacity>
+
       <View style={styles.snapBtnWrapper}>
         <TouchableOpacity style={styles.snapBtn} onPress={handleSnap}></TouchableOpacity>
       </View>
+      
       <TouchableOpacity style={styles.flipBtn} onPress={handleFlipCamera}>
         <MaterialIcons name="flip-camera-ios" size={40} color="#ffffff" />
       </TouchableOpacity>

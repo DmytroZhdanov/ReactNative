@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+// Component to render LoginScreen
 import { useRef, useState } from "react";
 import {
   View,
@@ -14,7 +14,9 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
+
 import { logInUser } from "../redux/auth/authOperations";
 
 const initialState = {

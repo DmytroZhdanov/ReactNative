@@ -1,3 +1,4 @@
+// Component to render in ProfileScreen if user didn't publish any post
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 
 export default function ProfileListEmpty() {

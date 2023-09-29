@@ -1,3 +1,4 @@
+// File to render private or public navigation
 import { createStackNavigator } from "@react-navigation/stack";
 import "react-native-gesture-handler";
 
@@ -17,7 +18,9 @@ import { Feather } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 
-const headerOptions = { headerShown: false };
+const headerOptions = {
+  headerShown: false,
+};
 
 const commentsScreenOptions = {
   headerBackTitleVisible: false,

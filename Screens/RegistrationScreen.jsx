@@ -1,6 +1,5 @@
+// Component to render RegistrationScreen
 import { useRef, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
 import {
   View,
   ImageBackground,
@@ -15,6 +14,8 @@ import {
   ScrollView,
   Image,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
 
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
@@ -49,10 +50,15 @@ export default function RegistrationScreen() {
 
   const dispatch = useDispatch();
 
+  /** Update component user state with photo info */
   const handleUserImagePress = () => {
     user.image ? setUser(prevState => ({ ...prevState, image: null })) : uploadImage();
   };
 
+  /**
+   * Upload chosen image from media library and set it to component user photo state
+   * @returns undefined if media library permission is not granted or user canceled operation to pick a new photo from media library
+   */
   const uploadImage = async () => {
     if (!mediaLibraryPermission.granted) {
       await MediaLibrary.requestPermissionsAsync();
@@ -105,6 +111,7 @@ export default function RegistrationScreen() {
                             style={styles.userPhoto}
                           />
                         </View>
+                        
                         <View style={styles.iconWrapper}>
                           <AntDesign
                             style={styles.photoIcon}

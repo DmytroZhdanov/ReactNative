@@ -1,5 +1,6 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
+// Component to render SnapPreviewScreen
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 // icons import
 import { Ionicons } from "@expo/vector-icons";
@@ -13,6 +14,7 @@ export default function SnapPreviewScreen() {
       <View style={styles.imageWrapper}>
         <Image style={styles.image} src={uri} />
       </View>
+
       <View style={styles.btnWrapper}>
         <TouchableOpacity
           style={{ ...styles.btn, ...styles.backBtn }}
@@ -25,14 +27,17 @@ export default function SnapPreviewScreen() {
             color="#FF6C00"
             style={{ marginRight: 16 }}
           />
+
           <Text style={{ ...styles.text, color: "#FF6C00" }}>Retake</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           style={{ ...styles.btn, ...styles.doneBtn }}
           activeOpacity={0.7}
           onPress={() => navigation.replace("CreatePosts", { uri, coords })}
         >
           <Text style={{ ...styles.text, color: "#ffffff" }}>Done</Text>
+          
           <Ionicons name="checkmark-done" size={24} color="#ffffff" style={{ marginLeft: 16 }} />
         </TouchableOpacity>
       </View>

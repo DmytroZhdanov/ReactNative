@@ -1,4 +1,4 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
+// Component to render CreatePostsScreen
 import { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
@@ -11,16 +11,17 @@ import {
   Keyboard,
   Image,
 } from "react-native";
-import { Camera } from "expo-camera";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useSelector } from "react-redux";
+import { Camera } from "expo-camera";
 
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
 
 import { addDoc, collection } from "firebase/firestore";
-
 import { db } from "../firebase/config";
+
 import { uploadPhotoToServer } from "../utils/uploadPhotoToServer";
 import { selectNickName, selectUserId, selectUserPhoto } from "../redux/auth/authSelectors";
 
@@ -57,6 +58,7 @@ export default function CreatePostsScreen() {
 
   useEffect(() => {
     params && params.uri && setPost(prevState => ({ ...prevState, image: params.uri }));
+
     params &&
       params.coords &&
       setPost(prevState => ({
@@ -87,6 +89,10 @@ export default function CreatePostsScreen() {
     setIsPublishDisabled(!post.image || !post.name || !post.location.title);
   }, [post]);
 
+  /**
+   * Upload chosen image from media library and navigate to it preview on PreviewScreen for upcoming uploading to server and publishing
+   * @returns undefined if media library permission is not granted or user canceled operation to pick a new photo from media library
+   */
   const uploadImage = async () => {
     if (!mediaLibraryPermission.granted) {
       await MediaLibrary.requestPermissionsAsync();
@@ -112,8 +118,12 @@ export default function CreatePostsScreen() {
     setIsKeyboardShown(false);
   };
 
+  /**
+   * Publish new post and navigate to Home Screen
+   */
   const handlePublish = async () => {
     const photoURL = await uploadPhotoToServer("postImage", post.image, userId);
+
     const newPost = {
       ...post,
       image: photoURL,
@@ -131,11 +141,18 @@ export default function CreatePostsScreen() {
     navigation.replace("Home");
   };
 
+  /**
+   * Upload post to database
+   * @param {Object} post Object with post details
+   */
   const uploadPostToServer = async post => {
     const reference = await collection(db, "posts");
     await addDoc(reference, post);
   };
 
+  /**
+   * Reset component post state and navigate to Home Screen
+   */
   const handleErase = () => {
     setPost(initialState);
     navigation.replace("Home");
@@ -160,6 +177,7 @@ export default function CreatePostsScreen() {
             </Camera>
           )}
         </View>
+        
         <TouchableOpacity activeOpacity={0.7} onPress={uploadImage}>
           <Text style={styles.text}>Upload image</Text>
         </TouchableOpacity>

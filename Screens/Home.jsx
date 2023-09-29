@@ -1,6 +1,10 @@
+// Component with tabs navigation 
+import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
-import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
+import { useDispatch } from "react-redux";
+
+import { logOutUser } from "../redux/auth/authOperations";
 
 import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
@@ -9,8 +13,6 @@ import ProfileScreen from "./ProfileScreen";
 // icons import
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import { useDispatch } from "react-redux";
-import { logOutUser } from "../redux/auth/authOperations";
 
 const Tabs = createBottomTabNavigator();
 

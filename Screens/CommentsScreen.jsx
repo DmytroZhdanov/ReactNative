@@ -1,6 +1,5 @@
-import { useRoute } from "@react-navigation/native";
+// Component to render CommentsScreen with relevant comments to appropriate post
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import {
   Dimensions,
   FlatList,
@@ -13,6 +12,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { useRoute } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 import { addDoc, collection, onSnapshot } from "firebase/firestore";
 
 import { db } from "../firebase/config";
@@ -40,23 +41,30 @@ export default function CommentsScreen() {
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
 
-  const getCurrentPost = async () => {
-    const reference = await collection(db, "posts");
-    await onSnapshot(reference, data =>
-      setPost(data.docs.filter(doc => doc.id === postId)[0].data())
-    );
-  };
-
-  const getAllComments = async () => {
-    const reference = await collection(db, `posts/${postId}/comments`);
-    await onSnapshot(reference, data => setAllComments(data.docs.map(doc => doc.data())));
-  };
-
   useEffect(() => {
     getCurrentPost();
     getAllComments();
   }, []);
 
+  /**
+   * Get appropriate post details from database and set it to component state
+   */
+  const getCurrentPost = async () => {
+    const reference = collection(db, "posts");
+    onSnapshot(reference, data => setPost(data.docs.filter(doc => doc.id === postId)[0].data()));
+  };
+
+  /**
+   * Get all comments details relevant to the current post and set it to component state
+   */
+  const getAllComments = async () => {
+    const reference = collection(db, `posts/${postId}/comments`);
+    onSnapshot(reference, data => setAllComments(data.docs.map(doc => doc.data())));
+  };
+
+  /**
+   * Publish new comment and reset component comment state
+   */
   const handleCommentSend = () => {
     Keyboard.dismiss();
 
@@ -75,8 +83,12 @@ export default function CommentsScreen() {
     setComment("");
   };
 
+  /**
+   * Upload comment details to to database to relevant post
+   * @param {Object} comment Comment details
+   */
   const addComment = async comment => {
-    const reference = await collection(db, `posts/${postId}/comments`);
+    const reference = collection(db, `posts/${postId}/comments`);
     await addDoc(reference, comment);
   };
 
@@ -112,6 +124,7 @@ export default function CommentsScreen() {
               isInputFocused && { marginBottom: Platform.OS === "ios" ? 40 : 8 },
             ]}
           />
+
           <KeyboardAvoidingView behavior="position">
             <View
               style={[
@@ -131,6 +144,7 @@ export default function CommentsScreen() {
                 onFocus={() => setIsInputFocused(true)}
                 onBlur={() => setIsInputFocused(false)}
               />
+              
               <TouchableOpacity
                 style={styles.sendBtn}
                 activeOpacity={0.7}

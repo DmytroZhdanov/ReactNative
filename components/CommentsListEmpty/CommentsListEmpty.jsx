@@ -1,3 +1,4 @@
+// Component to render when no any post comments posted yet
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 
 export default function CommentsListEmpty() {
