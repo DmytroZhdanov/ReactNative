@@ -22,7 +22,7 @@ import { addDoc, collection } from "firebase/firestore";
 
 import { db } from "../firebase/config";
 import { uploadPhotoToServer } from "../utils/uploadPhotoToServer";
-import { selectUserId } from "../redux/auth/authSelectors";
+import { selectNickName, selectUserId, selectUserPhoto } from "../redux/auth/authSelectors";
 
 // icons import
 import { FontAwesome } from "@expo/vector-icons";
@@ -52,6 +52,8 @@ export default function CreatePostsScreen() {
   const [locationPermission, requestLocationPermission] = Location.useForegroundPermissions();
 
   const userId = useSelector(selectUserId);
+  const userNickName = useSelector(selectNickName);
+  const userPhoto = useSelector(selectUserPhoto);
 
   useEffect(() => {
     params && params.uri && setPost(prevState => ({ ...prevState, image: params.uri }));
@@ -115,7 +117,11 @@ export default function CreatePostsScreen() {
     const newPost = {
       ...post,
       image: photoURL,
-      authorId: userId,
+      author: {
+        id: userId,
+        nickName: userNickName,
+        photo: userPhoto,
+      },
       createdAt: Date.now(),
     };
 

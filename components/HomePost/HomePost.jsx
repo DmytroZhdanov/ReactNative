@@ -71,7 +71,13 @@ export default function HomePost({ item, navigation }) {
         style={{ width: windowWidth - 32, height: (windowWidth - 32) / 1.43, borderRadius: 8 }}
         resizeMode={"cover"}
       />
-      <Text style={styles.name}>{item.name}</Text>
+      <View style={styles.descriptionWrapper}>
+        <Text style={styles.name}>{item.name}</Text>
+        <View style={styles.author}>
+          <Feather name="user" size={20} color="rgba(33, 33, 33, 0.8)" />
+          <Text style={styles.authorName}>{item.author.nickName}</Text>
+        </View>
+      </View>
       <View style={styles.details}>
         <TouchableOpacity
           onPress={handleCommentsPress}
@@ -116,15 +122,28 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     paddingHorizontal: 16,
   },
-  name: {
+  descriptionWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginVertical: 8,
+  },
+  name: {
     fontFamily: "Roboto-Medium",
     fontSize: 16,
     color: "#212121",
   },
+  author: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  authorName: {
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    color: "#212121",
+    marginLeft: 8,
+  },
   details: {
     flexDirection: "row",
-    // justifyContent: "space-between",
   },
   detailWrapper: {
     flexDirection: "row",
