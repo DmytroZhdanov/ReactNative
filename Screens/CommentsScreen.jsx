@@ -59,7 +59,13 @@ export default function CommentsScreen() {
    */
   const getAllComments = async () => {
     const reference = collection(db, `posts/${postId}/comments`);
-    onSnapshot(reference, data => setAllComments(data.docs.map(doc => doc.data())));
+    onSnapshot(reference, data =>
+      setAllComments(
+        data.docs
+          .map(doc => doc.data())
+          .sort((firstComment, secondComment) => firstComment.time - secondComment.time)
+      )
+    );
   };
 
   /**
@@ -144,7 +150,7 @@ export default function CommentsScreen() {
                 onFocus={() => setIsInputFocused(true)}
                 onBlur={() => setIsInputFocused(false)}
               />
-              
+
               <TouchableOpacity
                 style={styles.sendBtn}
                 activeOpacity={0.7}
