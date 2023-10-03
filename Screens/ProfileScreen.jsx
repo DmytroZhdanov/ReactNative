@@ -37,6 +37,7 @@ export default function ProfileScreen() {
         data.docs
           .filter(doc => doc.data().author.id === userId)
           .map(doc => ({ ...doc.data(), id: doc.id }))
+          .sort((firstPost, secondPost) => secondPost.createdAt - firstPost.createdAt)
       )
     );
   };

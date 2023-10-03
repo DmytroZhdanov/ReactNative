@@ -29,7 +29,13 @@ export default function PostsScreen() {
    */
   const getAllPosts = async () => {
     const reference = collection(db, "posts");
-    onSnapshot(reference, data => setPosts(data.docs.map(doc => ({ ...doc.data(), id: doc.id }))));
+    onSnapshot(reference, data =>
+      setPosts(
+        data.docs
+          .map(doc => ({ ...doc.data(), id: doc.id }))
+          .sort((firstPost, secondPost) => secondPost.createdAt - firstPost.createdAt)
+      )
+    );
   };
 
   return (
@@ -38,13 +44,13 @@ export default function PostsScreen() {
         <View style={styles.photoWrapper}>
           <Image source={{ uri: userPhoto }} alt={"User Image"} style={styles.userImage} />
         </View>
-        
+
         <View style={styles.userInfo}>
           <Text style={styles.userName}>{userNickName}</Text>
           <Text style={styles.userEmail}>{userEmail}</Text>
         </View>
       </View>
-      
+
       <FlatList
         data={posts}
         renderItem={({ item }) => <HomePost item={item} navigation={navigation} />}
