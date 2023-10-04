@@ -9,8 +9,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as Location from "expo-location";
 
 // icon import
-import { MaterialIcons } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
+import { MaterialIcons, Feather } from "@expo/vector-icons";
 
 export default function CameraScreen() {
   const [type, setType] = useState(CameraType.back);

@@ -7,9 +7,7 @@ import { db } from "../../firebase/config";
 import { selectUserId } from "../../redux/auth/authSelectors";
 
 // icon import
-import { Feather } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-
+import { Feather, FontAwesome } from "@expo/vector-icons";
 
 export default function ProfilePost({ item, navigation }) {
   const [commentsCount, setCommentsCount] = useState(null);

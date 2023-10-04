@@ -9,8 +9,7 @@ import { logOutUser, updateProfilePhoto } from "../../redux/auth/authOperations"
 import { uploadPhotoToServer } from "../../utils/uploadPhotoToServer";
 
 // icon import
-import { AntDesign } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 
 export default function ProfileListHeader({ userNickName, userPhoto, userId }) {
   const dispatch = useDispatch();

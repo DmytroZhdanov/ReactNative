@@ -1,5 +1,5 @@
 // Component to render CreatePostsScreen
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -11,7 +11,7 @@ import {
   Keyboard,
   Image,
 } from "react-native";
-import { useFocusEffect, useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
+import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { Camera } from "expo-camera";
 
@@ -26,8 +26,7 @@ import { uploadPhotoToServer } from "../utils/uploadPhotoToServer";
 import { selectNickName, selectUserId, selectUserPhoto } from "../redux/auth/authSelectors";
 
 // icons import
-import { FontAwesome } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
+import { FontAwesome, Feather } from "@expo/vector-icons";
 
 const initialState = {
   image: null,
@@ -56,7 +55,7 @@ export default function CreatePostsScreen() {
   const userNickName = useSelector(selectNickName);
   const userPhoto = useSelector(selectUserPhoto);
 
-  const isFocused = useIsFocused()
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     params && params.uri && setPost(prevState => ({ ...prevState, image: params.uri }));
@@ -167,16 +166,18 @@ export default function CreatePostsScreen() {
           {post.image ? (
             <Image src={post.image} style={styles.camera} />
           ) : (
-            isFocused && <Camera style={styles.camera}>
-              <TouchableOpacity
-                style={styles.addImageBtn}
-                onPress={() => {
-                  navigation.navigate("Camera");
-                }}
-              >
-                <FontAwesome name="camera" size={24} color="#BDBDBD" />
-              </TouchableOpacity>
-            </Camera>
+            isFocused && (
+              <Camera style={styles.camera}>
+                <TouchableOpacity
+                  style={styles.addImageBtn}
+                  onPress={() => {
+                    navigation.navigate("Camera");
+                  }}
+                >
+                  <FontAwesome name="camera" size={24} color="#BDBDBD" />
+                </TouchableOpacity>
+              </Camera>
+            )
           )}
         </View>
 
