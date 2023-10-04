@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import { FlatList, Image, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
-import { collection, onSnapshot } from "firebase/firestore";
 
+import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/config";
 
-import HomePost from "../components/HomePost/HomePost";
+import Post from "../components/Post/Post";
 
 import { selectEmail, selectNickName, selectUserPhoto } from "../redux/auth/authSelectors";
+import { POST_TYPES } from "../utils/variables";
 
 export default function PostsScreen() {
   const [posts, setPosts] = useState(null);
@@ -53,7 +54,7 @@ export default function PostsScreen() {
 
       <FlatList
         data={posts}
-        renderItem={({ item }) => <HomePost item={item} navigation={navigation} />}
+        renderItem={({ item }) => <Post item={item} navigation={navigation} type={POST_TYPES.HOME} />}
         keyExtractor={item => item.id}
       />
     </View>

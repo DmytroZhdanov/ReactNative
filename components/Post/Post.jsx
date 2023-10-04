@@ -1,15 +1,18 @@
-// Component to render one post on PostsScreen
 import { useEffect, useState } from "react";
-import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
+
 import { addDoc, collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase/config";
+
 import { selectUserId } from "../../redux/auth/authSelectors";
 
-// icon import
-import { Feather } from "@expo/vector-icons";
+import HomePostDetails from "../HomePostDetails/HomePostDetails";
+import ProfilePostDetails from "../ProfilePostDetails/ProfilePostDetails";
 
-export default function HomePost({ item, navigation }) {
+import { POST_TYPES } from "../../utils/variables";
+
+export default function Post({ item, navigation, type }) {
   const [commentsCount, setCommentsCount] = useState(null);
   const [likesCount, setLikesCount] = useState(null);
   const [isUserLiked, setIsUserLiked] = useState(null);
@@ -89,95 +92,47 @@ export default function HomePost({ item, navigation }) {
       <Image
         source={{ uri: item.image }}
         alt={item.name}
-        style={{ width: windowWidth - 32, height: (windowWidth - 32) / 1.43, borderRadius: 8 }}
+        style={{ ...styles.image, width: windowWidth - 32, height: (windowWidth - 32) / 1.43 }}
         resizeMode={"cover"}
       />
 
-      <View style={styles.descriptionWrapper}>
-        <Text style={styles.name}>{item.name}</Text>
+      {type === POST_TYPES.HOME && (
+        <HomePostDetails
+          item={item}
+          commentsCount={commentsCount}
+          likesCount={likesCount}
+          isUserLiked={isUserLiked}
+          onCommentPress={handleCommentsPress}
+          onLikePress={handleLikePress}
+          onLocationPress={handleLocationPress}
+        />
+      )}
 
-        <View style={styles.author}>
-          <Feather name="user" size={20} color="rgba(33, 33, 33, 0.8)" />
-          <Text style={styles.authorName}>{item.author.nickName}</Text>
-        </View>
-      </View>
-
-      <View style={styles.details}>
-        <TouchableOpacity
-          onPress={handleCommentsPress}
-          style={styles.detailWrapper}
-          activeOpacity={0.6}
-        >
-          <Feather name="message-circle" size={24} color="#BDBDBD" />
-          <Text style={{ ...styles.detailsText, marginLeft: 6 }}>{commentsCount}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{ ...styles.detailWrapper, marginLeft: 24 }}
-          activeOpacity={0.7}
-          onPress={handleLikePress}
-        >
-          <Feather name="thumbs-up" size={24} color={isUserLiked ? "#FF6C00" : "#BDBDBD"} />
-
-          <Text
-            style={[{ ...styles.detailsText, marginLeft: 6 }, isUserLiked && { color: "#FF6C00" }]}
-          >
-            {likesCount}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{ ...styles.detailWrapper, marginLeft: "auto" }}
-          activeOpacity={0.6}
-          onPress={handleLocationPress}
-          disabled={!item.location.coords}
-        >
-          <Feather name="map-pin" size={24} color="#BDBDBD" />
-          
-          <Text style={{ ...styles.detailsText, marginLeft: 4, textDecorationLine: "underline" }}>
-            {item.location.title}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {type === POST_TYPES.PROFILE && (
+        <ProfilePostDetails
+          item={item}
+          commentsCount={commentsCount}
+          likesCount={likesCount}
+          isUserLiked={isUserLiked}
+          onCommentPress={handleCommentsPress}
+          onLikePress={handleLikePress}
+          onLocationPress={handleLocationPress}
+        />
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 32,
+    paddingBottom: 32,
     paddingHorizontal: 16,
+
+    backgroundColor: "#ffffff",
+    borderWidth: 1,
+    borderColor: "#ffffff",
   },
-  descriptionWrapper: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 8,
-  },
-  name: {
-    fontFamily: "Roboto-Medium",
-    fontSize: 16,
-    color: "#212121",
-  },
-  author: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  authorName: {
-    fontFamily: "Roboto-Regular",
-    fontSize: 16,
-    color: "#212121",
-    marginLeft: 8,
-  },
-  details: {
-    flexDirection: "row",
-  },
-  detailWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  detailsText: {
-    fontFamily: "Roboto-Regular",
-    fontSize: 16,
-    color: "#BDBDBD",
+  image: {
+    borderRadius: 8,
   },
 });

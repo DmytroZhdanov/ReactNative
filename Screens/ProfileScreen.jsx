@@ -7,11 +7,12 @@ import { collection, onSnapshot } from "firebase/firestore";
 
 import { db } from "../firebase/config";
 
-import ProfilePost from "../components/ProfilePost/ProfilePost";
 import ProfileListHeader from "../components/ProfileListHeader/ProfileListHeader";
 import ProfileListEmpty from "../components/ProfileListEmpty/ProfileListEmpty";
 
 import { selectNickName, selectUserId, selectUserPhoto } from "../redux/auth/authSelectors";
+import Post from "../components/Post/Post";
+import { POST_TYPES } from "../utils/variables";
 
 export default function ProfileScreen() {
   const [posts, setPosts] = useState(null);
@@ -50,7 +51,7 @@ export default function ProfileScreen() {
       >
         <FlatList
           data={posts}
-          renderItem={({ item }) => <ProfilePost item={item} navigation={navigation} />}
+          renderItem={({ item }) => <Post item={item} navigation={navigation} type={POST_TYPES.PROFILE} />}
           keyExtractor={item => item.id}
           ListHeaderComponent={() => (
             <ProfileListHeader userNickName={userNickName} userPhoto={userPhoto} userId={userId} />
