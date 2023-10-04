@@ -1,5 +1,5 @@
 // Component to render CreatePostsScreen
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -11,7 +11,7 @@ import {
   Keyboard,
   Image,
 } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useFocusEffect, useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { Camera } from "expo-camera";
 
@@ -55,6 +55,8 @@ export default function CreatePostsScreen() {
   const userId = useSelector(selectUserId);
   const userNickName = useSelector(selectNickName);
   const userPhoto = useSelector(selectUserPhoto);
+
+  const isFocused = useIsFocused()
 
   useEffect(() => {
     params && params.uri && setPost(prevState => ({ ...prevState, image: params.uri }));
@@ -165,7 +167,7 @@ export default function CreatePostsScreen() {
           {post.image ? (
             <Image src={post.image} style={styles.camera} />
           ) : (
-            <Camera style={styles.camera}>
+            isFocused && <Camera style={styles.camera}>
               <TouchableOpacity
                 style={styles.addImageBtn}
                 onPress={() => {
@@ -177,7 +179,7 @@ export default function CreatePostsScreen() {
             </Camera>
           )}
         </View>
-        
+
         <TouchableOpacity activeOpacity={0.7} onPress={uploadImage}>
           <Text style={styles.text}>Upload image</Text>
         </TouchableOpacity>

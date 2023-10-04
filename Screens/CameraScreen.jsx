@@ -1,8 +1,8 @@
 // Component to render CameraScreen
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { Camera } from "expo-camera";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { Camera, CameraType } from "expo-camera";
 
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
@@ -10,15 +10,18 @@ import * as Location from "expo-location";
 
 // icon import
 import { MaterialIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 export default function CameraScreen() {
-  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [type, setType] = useState(CameraType.back);
   const [cameraRef, setCameraRef] = useState(null);
   const [galleryImage, setGalleryImage] = useState(null);
 
   const navigation = useNavigation();
 
   const [mediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
+
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     if (mediaLibraryPermission) {
@@ -45,7 +48,7 @@ export default function CameraScreen() {
 
     const info = await MediaLibrary.getAssetInfoAsync(result.assets[0].assetId);
 
-    navigation.replace("SnapPreview", {
+    navigation.navigate("SnapPreview", {
       uri: result.assets[0].uri,
       coords: info?.location || null,
     });
@@ -56,24 +59,27 @@ export default function CameraScreen() {
    */
   const handleSnap = async () => {
     const { uri } = await cameraRef.takePictureAsync();
+    cameraRef.pausePreview();
     const {
       coords: { latitude, longitude },
     } = await Location.getCurrentPositionAsync();
 
-    navigation.replace("SnapPreview", { uri, coords: { latitude, longitude } });
+    navigation.navigate("SnapPreview", { uri, coords: { latitude, longitude } });
   };
 
   /**
    * Toggle camera type from back to front and vice versa
    */
   const handleFlipCamera = () => {
-    setType(
-      type === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back
-    );
+    setType(current => (current === CameraType.back ? CameraType.front : CameraType.back));
   };
 
-  return (
+  return isFocused ? (
     <Camera style={styles.camera} type={type} ref={setCameraRef}>
+      <TouchableOpacity style={styles.back} onPress={navigation.goBack}>
+        <Feather name="arrow-left" size={24} color="#212121" />
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.gallery} onPress={handleGalleryPress}>
         {galleryImage && <Image src={galleryImage} style={styles.galleryImage} />}
       </TouchableOpacity>
@@ -81,17 +87,24 @@ export default function CameraScreen() {
       <View style={styles.snapBtnWrapper}>
         <TouchableOpacity style={styles.snapBtn} onPress={handleSnap}></TouchableOpacity>
       </View>
-      
+
       <TouchableOpacity style={styles.flipBtn} onPress={handleFlipCamera}>
         <MaterialIcons name="flip-camera-ios" size={40} color="#ffffff" />
       </TouchableOpacity>
     </Camera>
+  ) : (
+    <></>
   );
 }
 
 const styles = StyleSheet.create({
   camera: {
     flex: 1,
+  },
+  back: {
+    position: "absolute",
+    top: 60,
+    left: 16,
   },
   gallery: {
     position: "absolute",

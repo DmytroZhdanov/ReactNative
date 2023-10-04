@@ -34,10 +34,10 @@ export default function SnapPreviewScreen() {
         <TouchableOpacity
           style={{ ...styles.btn, ...styles.doneBtn }}
           activeOpacity={0.7}
-          onPress={() => navigation.replace("CreatePosts", { uri, coords })}
+          onPress={() => navigation.navigate("CreatePosts", { uri, coords })}
         >
           <Text style={{ ...styles.text, color: "#ffffff" }}>Done</Text>
-          
+
           <Ionicons name="checkmark-done" size={24} color="#ffffff" style={{ marginLeft: 16 }} />
         </TouchableOpacity>
       </View>
