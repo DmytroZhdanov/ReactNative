@@ -6,6 +6,7 @@ import { Feather } from "@expo/vector-icons";
 export default function HomePostDetails(props) {
   const {
     item,
+    navigation,
     commentsCount,
     likesCount,
     isUserLiked,
@@ -13,6 +14,14 @@ export default function HomePostDetails(props) {
     onLikePress,
     onLocationPress,
   } = props;
+
+  /**
+   * Navigate to post author's profile
+   */
+  const handleAuthorPress = () => {
+    const { id, nickName, photo } = item.author;
+    navigation.navigate("Profile", { id, nickName, photo });
+  };
 
   const handleCommentsPress = () => {
     onCommentPress();
@@ -31,10 +40,10 @@ export default function HomePostDetails(props) {
       <View style={styles.descriptionWrapper}>
         <Text style={styles.name}>{item.name}</Text>
 
-        <View style={styles.author}>
+        <TouchableOpacity style={styles.author} onPress={handleAuthorPress}>
           <Feather name="user" size={20} color="rgba(33, 33, 33, 0.8)" />
           <Text style={styles.authorName}>{item.author.nickName}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.details}>

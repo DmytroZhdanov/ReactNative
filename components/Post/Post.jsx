@@ -99,6 +99,7 @@ export default function Post({ item, navigation, type }) {
       {type === POST_TYPES.HOME && (
         <HomePostDetails
           item={item}
+          navigation={navigation}
           commentsCount={commentsCount}
           likesCount={likesCount}
           isUserLiked={isUserLiked}

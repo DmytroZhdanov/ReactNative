@@ -1,14 +1,15 @@
-// Component with tabs navigation 
+// Component with tabs navigation
 import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
-
-import { logOutUser } from "../redux/auth/authOperations";
+import { useDispatch, useSelector } from "react-redux";
 
 import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
 import ProfileScreen from "./ProfileScreen";
+
+import { logOutUser } from "../redux/auth/authOperations";
+import { selectNickName, selectUserId, selectUserPhoto } from "../redux/auth/authSelectors";
 
 // icons import
 import { Feather, AntDesign } from "@expo/vector-icons";
@@ -18,6 +19,16 @@ const Tabs = createBottomTabNavigator();
 export default function Home() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  const userId = useSelector(selectUserId);
+  const userNickName = useSelector(selectNickName);
+  const userPhoto = useSelector(selectUserPhoto);
+
+  const profileParams = {
+    id: userId,
+    nickName: userNickName,
+    photo: userPhoto,
+  };
 
   const tabBarOptions = {
     common: {
@@ -81,7 +92,12 @@ export default function Home() {
         component={CreatePostsScreen}
         options={tabBarOptions.createPostScreen}
       />
-      <Tabs.Screen name="Profile" component={ProfileScreen} options={tabBarOptions.profileScreen} />
+      <Tabs.Screen
+        name="Profile"
+        component={ProfileScreen}
+        initialParams={profileParams}
+        options={tabBarOptions.profileScreen}
+      />
     </Tabs.Navigator>
   );
 }

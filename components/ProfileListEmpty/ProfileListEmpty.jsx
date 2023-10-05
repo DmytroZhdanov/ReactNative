@@ -1,13 +1,19 @@
 // Component to render in ProfileScreen if user didn't publish any post
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 
-export default function ProfileListEmpty() {
+export default function ProfileListEmpty({ isOwnProfile, userNickName }) {
   const windowHeight = Dimensions.get("window").height;
 
   return (
     <View style={{ ...styles.noPostTextWrapper, height: windowHeight - 390 }}>
-      <Text style={styles.noPostText}>No posts yet...</Text>
-      <Text style={styles.noPostText}>Create your first post now!</Text>
+      {isOwnProfile ? (
+        <>
+          <Text style={styles.noPostText}>No posts yet...</Text>
+          <Text style={styles.noPostText}>Create your first post now!</Text>
+        </>
+      ) : (
+        <Text style={styles.noPostText}>{userNickName} has nothing posted yet...</Text>
+      )}
     </View>
   );
 }
