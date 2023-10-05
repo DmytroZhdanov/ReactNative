@@ -20,8 +20,6 @@ export default function Post({ item, navigation, type }) {
 
   const userId = useSelector(selectUserId);
 
-  const windowWidth = Dimensions.get("window").width;
-
   useEffect(() => {
     countAllComments();
     countAllLikes();
@@ -92,7 +90,7 @@ export default function Post({ item, navigation, type }) {
       <Image
         source={{ uri: item.image }}
         alt={item.name}
-        style={{ ...styles.image, width: windowWidth - 32, height: (windowWidth - 32) / 1.43 }}
+        style={styles.image}
         resizeMode={"cover"}
       />
 
@@ -134,6 +132,8 @@ const styles = StyleSheet.create({
     borderColor: "#ffffff",
   },
   image: {
+    width: Dimensions.get("window").width - 32,
+    height: (Dimensions.get("window").width - 32) / 1.43,
     borderRadius: 8,
   },
 });

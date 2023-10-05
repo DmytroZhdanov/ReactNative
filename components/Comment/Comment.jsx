@@ -5,8 +5,6 @@ import { selectUserId } from "../../redux/auth/authSelectors";
 import { transformDate } from "../../utils/transformDate";
 
 export default function Comment({ item }) {
-  const windowWidth = Dimensions.get("window").width;
-
   const { id, image } = item.author;
 
   const userId = useSelector(selectUserId);
@@ -25,7 +23,6 @@ export default function Comment({ item }) {
       <View
         style={[
           styles.commentContainer,
-          { width: windowWidth - 76 },
           isAuthorizedUser ? { borderTopLeftRadius: 6 } : { borderTopRightRadius: 6 },
         ]}
       >
@@ -52,6 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f6f6f6",
   },
   commentContainer: {
+    width: Dimensions.get("window").width - 76,
     backgroundColor: "rgba(0, 0, 0, 0.03)",
     padding: 16,
     gap: 8,

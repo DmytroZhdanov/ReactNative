@@ -2,10 +2,8 @@
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 
 export default function CommentsListEmpty() {
-  const windowHeight = Dimensions.get("window").height;
-
   return (
-    <View style={{ ...styles.noPostTextWrapper, height: windowHeight - 472 }}>
+    <View style={styles.noPostTextWrapper}>
       <Text style={styles.noPostText}>No any comments yet...</Text>
       <Text style={styles.noPostText}>Write the first one!</Text>
     </View>
@@ -15,6 +13,7 @@ export default function CommentsListEmpty() {
 const styles = StyleSheet.create({
   noPostTextWrapper: {
     flex: 1,
+    height: Dimensions.get("window").height - 472,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#ffffff",

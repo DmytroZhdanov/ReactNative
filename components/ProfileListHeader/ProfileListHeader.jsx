@@ -16,8 +16,6 @@ export default function ProfileListHeader({ userNickName, userPhoto, userId, isO
 
   const [mediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
 
-  const windowWidth = Dimensions.get("window").width;
-
   /**
    * Uploading new photo if user currently doesn't have one.
    * Deleting user photo if existed.
@@ -56,7 +54,7 @@ export default function ProfileListHeader({ userNickName, userPhoto, userId, isO
     <View style={styles.contentWrapper}>
       <View style={styles.content}>
         <TouchableOpacity
-          style={{ ...styles.photoContainer, left: windowWidth / 2 - 60 }}
+          style={styles.photoContainer}
           activeOpacity={0.8}
           onPress={handleUserImagePress}
           disabled={!isOwnProfile}
@@ -114,6 +112,7 @@ const styles = StyleSheet.create({
   photoContainer: {
     position: "absolute",
     top: -60,
+    left: Dimensions.get("window").width / 2 - 60,
     width: 120,
     height: 120,
     backgroundColor: "#f6f6f6",

@@ -38,9 +38,6 @@ export default function CommentsScreen() {
 
   const { postId } = useRoute().params;
 
-  const windowWidth = Dimensions.get("window").width;
-  const windowHeight = Dimensions.get("window").height;
-
   useEffect(() => {
     getCurrentPost();
     getAllComments();
@@ -99,13 +96,7 @@ export default function CommentsScreen() {
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        { height: windowHeight - (Platform.OS === "ios" ? 103 : 80) },
-        isInputFocused && { paddingBottom: 340 },
-      ]}
-    >
+    <View style={[styles.container, isInputFocused && { paddingBottom: 340 }]}>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <>
           <FlatList
@@ -115,18 +106,14 @@ export default function CommentsScreen() {
               <Image
                 source={{ uri: post?.image }}
                 alt={post?.name}
-                style={{
-                  width: windowWidth - 32,
-                  borderRadius: 8,
-                  height: (windowWidth - 32) / 1.43,
-                }}
+                style={styles.image}
                 resizeMode={"cover"}
               />
             }
             ListHeaderComponentStyle={{ marginBottom: 32 }}
             ListEmptyComponent={CommentsListEmpty}
             style={[
-              { marginBottom: Platform.OS === "ios" ? 8 : -16 },
+              styles.commentsContainer,
               isInputFocused && { marginBottom: Platform.OS === "ios" ? 40 : 8 },
             ]}
           />
@@ -135,7 +122,6 @@ export default function CommentsScreen() {
             <View
               style={[
                 styles.commentInputWrapper,
-                { bottom: Platform.OS === "ios" ? -16 : -48 },
                 isInputFocused && { bottom: Platform.OS === "ios" ? 16 : -16 },
               ]}
             >
@@ -143,7 +129,7 @@ export default function CommentsScreen() {
                 placeholder="Comment..."
                 placeholderTextColor="#BDBDBD"
                 inputMode="text"
-                style={{ ...styles.input, width: windowWidth - 32 }}
+                style={styles.input}
                 multiline={true}
                 onChangeText={value => setComment(value)}
                 value={comment}
@@ -173,12 +159,23 @@ const styles = StyleSheet.create({
     paddingTop: 32,
     paddingBottom: 57,
     backgroundColor: "#ffffff",
+    height: Dimensions.get("window").height - (Platform.OS === "ios" ? 103 : 80),
+  },
+  image: {
+    width: Dimensions.get("window").width - 32,
+    borderRadius: 8,
+    height: (Dimensions.get("window").width - 32) / 1.43,
+  },
+  commentsContainer: {
+    marginBottom: Platform.OS === "ios" ? 8 : -16,
   },
   commentInputWrapper: {
     position: "absolute",
+    bottom: Platform.OS === "ios" ? -16 : -48,
     left: 0,
   },
   input: {
+    width: Dimensions.get("window").width - 32,
     height: 50,
     backgroundColor: "#F6F6F6",
     borderWidth: 1,

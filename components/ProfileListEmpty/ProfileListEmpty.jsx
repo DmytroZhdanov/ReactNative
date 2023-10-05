@@ -2,10 +2,8 @@
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 
 export default function ProfileListEmpty({ isOwnProfile, userNickName }) {
-  const windowHeight = Dimensions.get("window").height;
-
   return (
-    <View style={{ ...styles.noPostTextWrapper, height: windowHeight - 390 }}>
+    <View style={styles.noPostTextWrapper}>
       {isOwnProfile ? (
         <>
           <Text style={styles.noPostText}>No posts yet...</Text>
@@ -21,6 +19,7 @@ export default function ProfileListEmpty({ isOwnProfile, userNickName }) {
 const styles = StyleSheet.create({
   noPostTextWrapper: {
     flex: 1,
+    height: Dimensions.get("window").height - 390,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#ffffff",

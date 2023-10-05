@@ -41,8 +41,6 @@ export default function RegistrationScreen() {
 
   const [mediaLibraryPermission, requestMediaLibraryPermission] = MediaLibrary.usePermissions();
 
-  const windowWidth = Dimensions.get("window").width;
-
   const emailInput = useRef(null);
   const passwordInput = useRef(null);
 
@@ -98,7 +96,7 @@ export default function RegistrationScreen() {
               <View style={styles.formWrapper}>
                 <View style={{ ...styles.form, paddingBottom: isKeyboardShown ? 32 : 78 }}>
                   <TouchableOpacity
-                    style={{ ...styles.photoContainer, left: windowWidth / 2 - 60 }}
+                    style={styles.photoContainer}
                     activeOpacity={0.8}
                     onPress={handleUserImagePress}
                   >
@@ -111,7 +109,7 @@ export default function RegistrationScreen() {
                             style={styles.userPhoto}
                           />
                         </View>
-                        
+
                         <View style={styles.iconWrapper}>
                           <AntDesign
                             style={styles.photoIcon}
@@ -241,6 +239,7 @@ const styles = StyleSheet.create({
   photoContainer: {
     position: "absolute",
     top: -60,
+    left: Dimensions.get("window").width / 2 - 60,
     width: 120,
     height: 120,
     backgroundColor: "#f6f6f6",
