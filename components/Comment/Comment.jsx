@@ -7,14 +7,20 @@ import { transformDate } from "../../utils/transformDate";
 export default function Comment({ item }) {
   const windowWidth = Dimensions.get("window").width;
 
+  const { id, image } = item.author;
+
   const userId = useSelector(selectUserId);
-  const isAuthorizedUser = item.author.id === userId;
+  const isAuthorizedUser = id === userId;
 
   const commentTime = transformDate(item.time);
 
   return (
     <View style={[styles.commentWrapper, isAuthorizedUser && { flexDirection: "row-reverse" }]}>
-      <Image source={{ uri: item.author.image }} style={styles.image} />
+      {image ? (
+        <Image source={{ uri: image }} style={styles.image} />
+      ) : (
+        <View style={styles.image}></View>
+      )}
 
       <View
         style={[
@@ -43,6 +49,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
+    backgroundColor: "#f6f6f6",
   },
   commentContainer: {
     backgroundColor: "rgba(0, 0, 0, 0.03)",
