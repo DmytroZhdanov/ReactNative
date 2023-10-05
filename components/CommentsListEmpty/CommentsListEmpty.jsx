@@ -13,7 +13,7 @@ export default function CommentsListEmpty() {
 const styles = StyleSheet.create({
   noPostTextWrapper: {
     flex: 1,
-    height: Dimensions.get("window").height - 472,
+    height: Dimensions.get("window").height - 512,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#ffffff",

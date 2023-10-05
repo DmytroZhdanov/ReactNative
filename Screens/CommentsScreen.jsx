@@ -155,11 +155,11 @@ export default function CommentsScreen() {
 
 const styles = StyleSheet.create({
   container: {
+    height: Dimensions.get("window").height - (Platform.OS === "ios" ? 103 : 80),
     paddingHorizontal: 16,
     paddingTop: 32,
     paddingBottom: 57,
     backgroundColor: "#ffffff",
-    height: Dimensions.get("window").height - (Platform.OS === "ios" ? 103 : 80),
   },
   image: {
     width: Dimensions.get("window").width - 32,
