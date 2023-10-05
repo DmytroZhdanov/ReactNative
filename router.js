@@ -48,7 +48,7 @@ const mapScreenOptions = {
 
 export default function useRouter(isAuth) {
   return isAuth ? (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{lazy: true}}>
       <Stack.Screen name="Home" component={Home} options={headerOptions} />
       <Stack.Screen name="Posts" component={PostsScreen} options={headerOptions} />
       <Stack.Screen

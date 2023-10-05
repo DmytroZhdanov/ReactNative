@@ -42,6 +42,7 @@ export default function Home() {
       },
       tabBarShowLabel: false,
       tabBarStyle: { height: Platform.OS === "ios" ? 83 : 63 },
+      lazy: true,
     },
     postsScreen: {
       headerRight: () => (
