@@ -1,6 +1,6 @@
 // Component to render ProfileScreen
 import { useCallback, useState } from "react";
-import { View, ImageBackground, StyleSheet, FlatList } from "react-native";
+import { View, ImageBackground, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 
@@ -41,8 +41,9 @@ export default function ProfileScreen() {
     useCallback(() => {
       setIsOwnProfile(profileId === userId ? true : false);
       getAllPosts();
+      
       const unsubscribe = navigation.addListener("blur", () => {
-        navigation.setParams({ id: userId, nickName: userNickName, photo: userPhoto});
+        navigation.setParams({ id: userId, nickName: userNickName, photo: userPhoto });
       });
 
       return unsubscribe;
@@ -52,7 +53,7 @@ export default function ProfileScreen() {
   /**
    * Get all posts published by current user from database and set it to component state
    */
-  const getAllPosts = async () => {
+  const getAllPosts = () => {
     const reference = collection(db, "posts");
 
     onSnapshot(reference, data =>
