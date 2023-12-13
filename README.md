@@ -7,7 +7,7 @@ Integrated various features and functionalities, optimizing app performance and 
 - Implemented responsive design principles to ensure the app's compatibility across multiple devices and screen sizes.
 - Utilized Redux for efficient state management, enhancing the app's performance and providing a smooth user experience.
 - Collaborated with UI/UX designers to translate design wireframes into functional components, maintaining a cohesive design language throughout the app.
--Integrated native device capabilities, such as GPS, camera, and push notifications, enhancing app functionality.
+- Integrated native device capabilities, such as GPS, camera, and push notifications, enhancing app functionality.
 - Conducted rigorous testing and debugging to identify and resolve potential issues, delivering a high-quality, bug-free application.
 - Utilized Firebase Realtime Database to ensure efficient and real-time data synchronization, providing users with up-to-date information.
 - Integrated Firebase Authentication for secure user authentication, enhancing the app's security and user experience.
